@@ -1,0 +1,10 @@
+# Use a imagem oficial do PHP 8.1 com FPM
+FROM php:8.1-fpm
+
+# Instale as dependências necessárias para compilar as extensões
+RUN apt-get update && \
+    apt-get install -y libpq-dev && \
+    docker-php-ext-install pdo pdo_pgsql
+
+# Exponha a porta 9000
+EXPOSE 9000

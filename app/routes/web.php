@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\pagamentosController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',    [pagamentosController::class, 'index']);
+Route::post('/create',    [pagamentosController::class, 'create']);
+Route::get('/show/{publicKey}',    [pagamentosController::class, 'show']);

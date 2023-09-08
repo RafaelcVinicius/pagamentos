@@ -28,9 +28,12 @@ services:
 
   postgres:
     image: postgres:latest
+    ports:
+      - "5555:5432"
     environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_PASSWORD: 123456
-      POSTGRES_USER: root
+      POSTGRES_USER: rafael
       POSTGRES_DB: mydb
     networks:
       - laravel-network

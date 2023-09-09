@@ -215,12 +215,12 @@
                         fetch(window.location.protocol + "//" + window.location.host + "/api/process_payment", {
                             method: 'POST',
                             headers: {
-                                'Content-Type': 'application/json', // Define o tipo de conteúdo como JSON
+                                'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify(obj), // Converte os dados para JSON e os envia no corpo da requisição
+                            body: JSON.stringify(obj),
                         })
                         .then(response => {
-                        //   window.location = window.location.protocol + "//" + window.location.host + "/show/" + publicKey
+                            window.location = window.location.protocol + "//" + window.location.host + "/show/" + publicKey
                         })
                         .catch(error => {
                             console.error('Erro:', error);

@@ -6,8 +6,8 @@
     <title>Document</title>
 </head>
 <body>
-    @foreach($payments => $payment){
-        {{json_decode($payment)}}
-    }
+    @foreach($payments as $payment)
+        {{$payment}}
+    @endforeach
 </body>
 </html>

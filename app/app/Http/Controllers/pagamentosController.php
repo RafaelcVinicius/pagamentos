@@ -34,7 +34,7 @@ class pagamentosController extends Controller
     public function show(Request $request, $publcKey){
 
         $company = Companies::where("public_key", $publcKey)->first();
-        return view("showPayment.blade")->with('payments',  $company->payments);
+        return view("showPayment")->with('payments',  $company->payments);
     }
 
     public function createPagamento(Request $request){

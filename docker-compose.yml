@@ -38,8 +38,14 @@ services:
       POSTGRES_PASSWORD: 123456
       POSTGRES_USER: rafael
       POSTGRES_DB: mydb
+    volumes:
+      - database:/var/lib/mysql/
     networks:
       - laravel-network
 
 networks:
   laravel-network:
+
+volumes:
+  database:
+    driver: local

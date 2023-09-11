@@ -46,10 +46,10 @@ class pagamentosController extends Controller
         $payment->company_id = $company->id;
 
         $obj["transaction_amount"] = 0.51;
-        // $obj["payment_method_id"] = $request->get("paymentMethodId");
-        // $obj["issuer_id"] = $request->get("issuerId");
-        // $obj["token"] = $request->get("token");
-        // $obj["installments"] = $request->get("installments");
+        $obj["payment_method_id"] = $request->get("paymentMethodId");
+        $obj["issuer_id"] = $request->get("issuerId");
+        $obj["token"] = $request->get("token");
+        $obj["installments"] = $request->get("installments");
         $obj["payer"] = [
             "type" => "customer",
             "first_name" => "rafael",

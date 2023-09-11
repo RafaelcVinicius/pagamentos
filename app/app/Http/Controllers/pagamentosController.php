@@ -43,7 +43,7 @@ class pagamentosController extends Controller
         return view("showPayment")->with('payments',  $company->payments);
     }
 
-    public function createPagamento(Request $request){
+    public function createPayment(Request $request){
 
         $company = Companies::where("public_key", $request->get("publicKey"))->first();
 
@@ -130,5 +130,19 @@ class pagamentosController extends Controller
                 "cause" => $req->response->asJson?->cause,
             ], 200);
         }
+    }
+
+    public function createRefund(Request $request, $id){
+
+        // $req = new CustomRequest();
+        // $req->setRoute('https://api.mercadopago.com/v1/payments');
+        // $req->setHeaders([
+        //     'Content-Type' =>  'application/json',
+        //     'Authorization' => 'Bearer ' . $company->access_token,
+        // ]);
+        // $req->setbody(json_encode($obj));
+        // Log::info("post");
+        // $req->post();
+        // Log::info("fim");
     }
 }

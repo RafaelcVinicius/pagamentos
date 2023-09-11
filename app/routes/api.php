@@ -19,4 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/process_payment',    [pagamentosController::class, 'createPagamento']);
+Route::post('/process_payment',    [pagamentosController::class, 'createPayment']);
+Route::post('/process_refund',    [pagamentosController::class, 'createRefund']);

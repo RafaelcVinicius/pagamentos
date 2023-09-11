@@ -200,7 +200,7 @@
                         tokenElement.value = token.id;
 
                         const obj = {
-                            "issuer": document.getElementById("form-checkout__issuer").textContent.toLowerCase(),
+                            "paymentMethodId": document.getElementById("paymentMethodId").value,
                             "issuerId": document.getElementById("form-checkout__issuer").value,
                             "installments": Number(document.getElementById("form-checkout__installments").value),
                             "identificationType": document.getElementById("form-checkout__identificationType").value,
@@ -220,7 +220,18 @@
                             body: JSON.stringify(obj),
                         })
                         .then(response => {
-                            window.location = window.location.protocol + "//" + window.location.host + "/show/" + publicKey
+                            console.log(response);
+
+                            if(response.status == 201)
+                                window.location = window.location.protocol + "//" + window.location.host + "/show/" + publicKey
+
+                            return response.text();
+                        })
+                        .then(data => {
+                            // 'data' contém o conteúdo da resposta da API
+                            console.log('Resposta da API:', data);
+
+                            alert("Erro ao fazer a requisição: " + data.message)
                         })
                         .catch(error => {
                             console.error('Erro:', error);

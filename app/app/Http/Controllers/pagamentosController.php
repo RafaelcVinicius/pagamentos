@@ -39,17 +39,17 @@ class pagamentosController extends Controller
 
     public function createPagamento(Request $request){
 
-        $company = Companies::where("public_key", $request->get("publicKey"))->first();;
+        $company = Companies::where("public_key", $request->get("publicKey"))->first();
 
         $payment = new Payments();
         $payment->transaction_amount = 0.51;
         $payment->company_id = $company->id;
 
         $obj["transaction_amount"] = 0.51;
-        $obj["payment_method_id"] = $request->get("issuer");
-        $obj["issuer_id"] = $request->get("issuerId");
-        $obj["token"] = $request->get("token");
-        $obj["installments"] = $request->get("installments");
+        // $obj["payment_method_id"] = $request->get("paymentMethodId");
+        // $obj["issuer_id"] = $request->get("issuerId");
+        // $obj["token"] = $request->get("token");
+        // $obj["installments"] = $request->get("installments");
         $obj["payer"] = [
             "type" => "customer",
             "first_name" => "rafael",
@@ -107,18 +107,22 @@ class pagamentosController extends Controller
         $req->post();
         Log::info("fim");
 
-        $payment->payments_id = $req->response->asJson->id;
-        $payment->status = $req->response->asJson->status;
-        $payment->date_created = $req->response->asJson->date_created;
-        $payment->save();
-
         Log::info(json_encode($req));
 
-        if($req->response->code == 201||$req->response->code == 200){
+
+        if($req->response->code == 201){
+            $payment->payments_id = $req->response->asJson?->id;
+            $payment->status = $req->response->asJson?->status_detail;
+            $payment->date_created = $req->response->asJson?->date_created;
+            $payment->save();
+
             return response()->json([], 201);
         }
         else{
-            return response()->json([], 401);
+            return response()->json([
+                "message" => $req->response->asJson?->message,
+                "cause" => $req->response->asJson?->cause,
+            ], 200);
         }
     }
 }

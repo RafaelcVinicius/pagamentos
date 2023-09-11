@@ -20,7 +20,7 @@
     </style>
 </head>
 <body>
-    <input hidden id="publicKey" value="{{$publicKey}}"/>
+    <input hidden id="publicKey" value="{{$company->public_key}}"/>
     <script>
         const publicKey = document.getElementById("publicKey").value;
         const mp = new MercadoPago(publicKey);
@@ -223,7 +223,7 @@
                             console.log(response);
 
                             if(response.status == 201)
-                                window.location = window.location.protocol + "//" + window.location.host + "/show/" + publicKey
+                                window.location = window.location.protocol + "//" + window.location.host + "/show/" + {{$company->id}}
 
                             return response.text();
                         })

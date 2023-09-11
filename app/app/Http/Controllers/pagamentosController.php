@@ -28,12 +28,18 @@ class pagamentosController extends Controller
         $company->access_token = $request->get("accessToken");
         $company->save();
 
-        return view('payment')->with('publicKey', (string)$company->public_key);
+        return redirect()->route('payment', ['id' => $company->id]);
     }
 
-    public function show(Request $request, $publcKey){
+    public function paymentByCompany(Request $request, $id){
+        $company = Companies::where("id", $id)->first();
 
-        $company = Companies::where("public_key", $publcKey)->first();
+        return view('payment')->with('company', $company);
+    }
+
+    public function show(Request $request, $id){
+
+        $company = Companies::where("id", $id)->first();
         return view("showPayment")->with('payments',  $company->payments);
     }
 

@@ -17,4 +17,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/',    [pagamentosController::class, 'index']);
 Route::post('/create',    [pagamentosController::class, 'create']);
-Route::get('/show/{publicKey}',    [pagamentosController::class, 'show']);
+Route::get('/payment/{id}',    [pagamentosController::class, 'paymentByCompany'])->name("payment");
+Route::get('/show/{id}',    [pagamentosController::class, 'show']);

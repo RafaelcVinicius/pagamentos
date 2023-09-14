@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('payment_id');
             $table->decimal('amount');
             $table->string('status');
+            $table->string('detail');
             $table->timestamps();
         });
     }

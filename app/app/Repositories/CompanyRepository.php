@@ -2,28 +2,26 @@
 
 namespace App\Repositories;
 
-use App\Classes\CustomRequest;
+use App\Models\Companies;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
 
 class CompanyRepository implements CompanyRepositoryInterface
 {
-    public function showApiBcbSgs($code, $format = ''){
-        $req = new CustomRequest;
-        $req->setRoute(config('routesapi.bcb.sgs').$code.'/dados?formato=json/'.$format);
-        $req->setHeaders([
-            'Host'          =>  'api.bcb.gov.br',
-            'User-Agent'    =>  'null',
-            'Accept'        =>  '*/*',
-        ]);
+    public function store(array $data) : Companies {
+        return Companies::create($data);
+    }
 
-        if(($req->get()) && ($req->response->code == 200))
-            return $req->response->asJson;
-        else{
-            return [
-                'status'   => 'error',
-                'message'  => 'Ocorreu um erro na api no bcb',
-                'code'     =>  $req->response->code
-            ];
-        }
+    public function show() : array {
+        return [];
+    }
+
+    public function update(array $data, string $uuid) : Companies {
+        $companies = Companies::where('uuid', $uuid)->firstOrFail();
+
+        return $companies->update($data);
+    }
+
+    public function showByUuid(string $uuid) : Companies {
+       return Companies::where('uuid', $uuid)->firstOrFail();
     }
 }

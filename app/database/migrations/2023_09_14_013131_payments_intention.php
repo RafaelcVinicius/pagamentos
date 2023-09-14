@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('payments_intention', function (Blueprint $table) {
             $table->id();
             $table->uuid("uuid");
             $table->integer("company_id");
-            $table->string('transection_id');
-            $table->decimal('transection_amount');
-            $table->string('status');
-            $table->string('detail');
+            $table->string('payment_id')->nullable();
+            $table->decimal('total_amount');
+            $table->string('webhook');
+            $table->timestamp('date_approved')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('payments_intention');
     }
 };

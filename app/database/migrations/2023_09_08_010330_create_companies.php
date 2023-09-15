@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->string('email', 100);
+            $table->string('cnpjcpf', 14);
             $table->timestamps();
         });
     }

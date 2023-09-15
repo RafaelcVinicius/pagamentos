@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paymer', function (Blueprint $table) {
+        Schema::create('payments_status', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
-            $table->string('email', 100);
-            $table->string('cnpjcpf', 14);
+            $table->integer("payment_id")->comment('id da venda payments');;;
+            $table->string('status');
+            $table->string('detail');
+            $table->timestamp('date_approved')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +26,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paymer');
+        Schema::dropIfExists('payments_status');
+
     }
 };

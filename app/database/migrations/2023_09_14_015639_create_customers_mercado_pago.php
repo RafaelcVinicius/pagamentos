@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments_intention', function (Blueprint $table) {
+        Schema::create('customers_mercado_pago', function (Blueprint $table) {
             $table->id();
-            $table->uuid("uuid");
-            $table->integer("company_id");
+            $table->integer("gateway_customer_id")->unique()->comment('id da venda payments');;;
             $table->integer("paymer_id");
-            $table->string('payment_id')->nullable()->comment('id da venda payments');;
-            $table->decimal('total_amount')->comment('Valor original da venda');
-            $table->string('webhook');
+            $table->integer("gateway_id");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments_intention');
+        Schema::dropIfExists('customers_mercado_pago');
     }
 };

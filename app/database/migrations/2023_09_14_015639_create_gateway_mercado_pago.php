@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('gateway_mercado_pago', function (Blueprint $table) {
             $table->id();
-            $table->uuid("uuid");
             $table->integer("gateway_type");
             $table->integer("company_id");
             $table->string('public_key');
             $table->string('access_token');
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

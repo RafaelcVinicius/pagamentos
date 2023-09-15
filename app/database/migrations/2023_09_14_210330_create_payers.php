@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments_intention', function (Blueprint $table) {
+        Schema::create('payers', function (Blueprint $table) {
             $table->id();
-            $table->uuid("uuid");
+            $table->uuid('uuid');
             $table->integer("company_id");
-            $table->integer("paymer_id");
-            $table->string('payment_id')->nullable()->comment('id da venda payments');;
-            $table->decimal('total_amount')->comment('Valor original da venda');
-            $table->string('webhook');
+            $table->string('first_name', 20);
+            $table->string('last_name', 30);
+            $table->string('email', 100);
+            $table->string('cnpjcpf', 14);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments_intention');
+        Schema::dropIfExists('payers');
     }
 };

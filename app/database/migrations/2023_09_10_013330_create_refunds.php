@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('refunds', function (Blueprint $table) {
             $table->id();
-            $table->string('payment_id');
+            $table->string('payment_id')->comment('id da venda payments');;;
             $table->decimal('amount');
             $table->string('status');
             $table->string('detail');

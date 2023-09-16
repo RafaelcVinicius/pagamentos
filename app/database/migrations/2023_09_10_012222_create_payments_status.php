@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('payments_status', function (Blueprint $table) {
             $table->id();
-            $table->integer("payment_id")->comment('id da venda payments');;;
+            $table->integer("payment_id")->comment('id da venda payments');
             $table->string('status');
             $table->string('detail');
-            $table->timestamp('date_approved')->nullable();
             $table->timestamps();
+
+            $table->unique(['payment_id', 'status', 'detail']);
+
+            $table->foreign('payment_id')->references('id')->on('payments');
         });
     }
 

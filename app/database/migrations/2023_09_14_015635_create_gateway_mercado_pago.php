@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payers', function (Blueprint $table) {
+        Schema::create('gateway_mercado_pago', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
-            $table->integer("company_id");
-            $table->string('first_name', 20);
-            $table->string('last_name', 30);
-            $table->string('email', 100);
-            $table->string('cnpjcpf', 14);
+            // $table->integer("gateway_type");
+            $table->bigInteger("company_id");
+            $table->string('public_key');
+            $table->string('access_token');
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payers');
+        Schema::dropIfExists('gateway_mercado_pago');
     }
 };

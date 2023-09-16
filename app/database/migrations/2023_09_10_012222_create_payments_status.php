@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments_status', function (Blueprint $table) {
             $table->id();
-            $table->integer("payment_id")->comment('id da venda payments');
+            $table->bigInteger("payment_id")->comment('id da venda payments');
             $table->string('status');
             $table->string('detail');
             $table->timestamps();

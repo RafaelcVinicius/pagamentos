@@ -23,46 +23,45 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::prefix('company')->group(function (){
-    Route::post('/', [CompanyController::class, 'store']);
-    Route::get('/', [CompanyController::class, 'show']);
-    Route::prefix('{uuid}')->group(function () {
-        Route::put('/', [CompanyController::class, 'update']);
-        Route::get('/', [CompanyController::class, 'showByUuid']);
-    });
-});
-
-Route::prefix('payments')->group(function (){
-    Route::prefix('payment')->group(function (){
-        Route::post('/', [PaymentController::class, 'store']);
-        Route::get('/', [PaymentController::class, 'show']);
+Route::prefix('v1')->group(function (){
+    Route::prefix('company')->group(function (){
+        // Route::post('/', [CompanyController::class, 'store']);
+        Route::get('/', [CompanyController::class, 'show']);
         Route::prefix('{uuid}')->group(function () {
-            Route::put('/', [PaymentController::class, 'update']);
-            Route::get('/', [PaymentController::class, 'showByUuid']);
+            Route::put('/', [CompanyController::class, 'update']);
+            Route::get('/', [CompanyController::class, 'showByUuid']);
         });
     });
 
-    Route::prefix('intention')->group(function (){
-        Route::post('/', [PaymentIntentionController::class, 'store']);
-        Route::get('/', [PaymentIntentionController::class, 'show']);
-        Route::prefix('{uuid}')->group(function () {
-            Route::put('/', [PaymentIntentionController::class, 'update']);
-            Route::get('/', [PaymentIntentionController::class, 'showByUuid']);
+    Route::prefix('payments')->group(function (){
+        Route::prefix('payment')->group(function (){
+            Route::post('/', [PaymentController::class, 'store']);
+            Route::get('/', [PaymentController::class, 'show']);
+            Route::prefix('{uuid}')->group(function () {
+                Route::put('/', [PaymentController::class, 'update']);
+                Route::get('/', [PaymentController::class, 'showByUuid']);
+            });
+        });
+
+        Route::prefix('intention')->group(function (){
+            Route::post('/', [PaymentIntentionController::class, 'store']);
+            Route::get('/', [PaymentIntentionController::class, 'show']);
+            Route::prefix('{uuid}')->group(function () {
+                Route::put('/', [PaymentIntentionController::class, 'update']);
+                Route::get('/', [PaymentIntentionController::class, 'showByUuid']);
+            });
+        });
+
+        Route::prefix('refund')->group(function (){
+            Route::post('/', [PaymentIntentionController::class, 'store']);
+            Route::get('/', [PaymentIntentionController::class, 'show']);
+            Route::prefix('{uuid}')->group(function () {
+                Route::put('/', [PaymentIntentionController::class, 'update']);
+                Route::get('/', [PaymentIntentionController::class, 'showByUuid']);
+            });
         });
     });
 });
-
-Route::prefix('gateway')->group(function (){
-    Route::post('/', [GatewayController::class, 'store']);
-    Route::get('/', [GatewayController::class, 'show']);
-    Route::prefix('{uuid}')->group(function () {
-        Route::put('/', [GatewayController::class, 'update']);
-        Route::get('/', [GatewayController::class, 'showByUuid']);
-    });
-});
-
-
-
 
 Route::post('/process_payment',    [pagamentosController::class, 'createPayment']);
 Route::post('/process_refund',    [pagamentosController::class, 'createRefund']);

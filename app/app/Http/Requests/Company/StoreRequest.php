@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Company;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreRequest extends FormRequest
 {
@@ -22,7 +24,9 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'min:3', 'max:100', 'email'],
+            'email' => ['required', 'min:3', 'max:100'],
+            'cnpjCpf' => ['required', 'min:11', 'max:14'],
+            'businessName' => ['required', 'min:3', 'max:100'],
         ];
     }
 }

@@ -13,6 +13,8 @@ class Companies extends Model
     protected $primaryKey = 'id';
     protected $table = 'companies';
 
+    protected $fillable = ['uuid', 'email', 'cnpjcpf', 'business_name'];
+
     public function payments(){
         return $this->hasMany(Payments::class, 'company_id', 'id');
     }

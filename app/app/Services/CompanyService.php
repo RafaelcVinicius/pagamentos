@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Resources\CompanyResource;
 use App\Repositories\CompanyRepository;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
+use Ramsey\Uuid\Uuid;
 
 class CompanyService
 {
@@ -16,7 +17,7 @@ class CompanyService
     }
 
     public function store(array $data) : CompanyResource {
-        return new CompanyResource($this->companyRepository->store($data));
+        return new CompanyResource($this->companyRepository->store($this->prepareData($data)));
     }
 
     public function show() : array {
@@ -29,5 +30,14 @@ class CompanyService
 
     public function showByUuid(string $uuid) : CompanyResource {
         return new CompanyResource($this->companyRepository->showByUuid($uuid));
+    }
+
+    private function prepareData(array $data): array{
+        return array(
+            'uuid'          => (string) Uuid::uuid4(),
+            'email'         => $data['email'],
+            'cnpjcpf'       => $data['cnpjCpf'],
+            'business_name' => $data['businessName'],
+        );
     }
 }

@@ -36,11 +36,9 @@ class KeycloakAuthentication
                 EOD;
 
             $decodedToken = JWT::decode($token, new Key($publicKey, 'RS256'));
-            Log::info(json_encode($decodedToken));
 
             $user = User::where('uuid', $decodedToken->sub)->first();
-
-            Log::info(json_encode( $user));
+            // $user = User::first();
 
             if(!$user){
                 $user = new User();
@@ -49,14 +47,10 @@ class KeycloakAuthentication
                 $user->name     = $decodedToken->name;
                 $user->password = $decodedToken->preferred_username;
                 $user->save();
+                $user->refresh();
             }
 
-            Log::info(json_encode( $user));
-
-            Auth::attempt(['email' => $user->email, 'password' =>  $user->password]);
-
-
-            Log::info(json_encode($decodedToken));
+            Auth::attempt(['email' => $user->email, 'password' =>  $decodedToken->preferred_username]);
 
             return $next($request);
         } catch (\Exception $e) {

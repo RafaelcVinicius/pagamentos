@@ -4,8 +4,8 @@ namespace App\Repositories\Contracts;
 
 interface CompanyRepositoryInterface
 {
+    public function index();
     public function store(array $data);
-    public function show();
-    public function update(array $data, string $uuid);
-    public function showByUuid(string $uuid);
+    public function update(string $uuid, array $data);
+    public function show(string $uuid);
 }

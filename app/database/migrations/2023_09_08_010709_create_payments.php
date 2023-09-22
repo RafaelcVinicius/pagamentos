@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->uuid("uuid");
+            $table->uuid("uuid")->unique();
             $table->bigInteger('gateway_payment_id')->unique()->comment('Id externo do gateway de pagamento');
             $table->bigInteger("company_id");
             $table->bigInteger("paymer_id");

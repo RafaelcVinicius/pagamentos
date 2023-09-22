@@ -15,10 +15,11 @@ class CompanyResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "uuid" => $this->uuid,
-            "email" => $this->email,
-            "dateCreate" => $this->date_create,
-            "dateUpdate" => $this->date_update,
+            "uuid"          => $this->uuid,
+            "email"         => $this->email,
+            "businessName"  => $this->business_name,
+            "updatedAt"     => $this->updated_at,
+            "createdAt"     => $this->created_at,
         ];
     }
 }

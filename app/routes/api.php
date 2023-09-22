@@ -22,11 +22,11 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function (){
     Route::middleware(['keycloak'])->group(function () {
         Route::prefix('company')->group(function (){
+            Route::get('/', [CompanyController::class, 'index']);
             Route::post('/', [CompanyController::class, 'store']);
-            Route::get('/', [CompanyController::class, 'show']);
-            Route::prefix('{uuid}')->group(function () {
+            Route::prefix('{companyUuid}')->group(function () {
                 Route::put('/', [CompanyController::class, 'update']);
-                Route::get('/', [CompanyController::class, 'showByUuid']);
+                Route::get('/', [CompanyController::class, 'show']);
             });
         });
 

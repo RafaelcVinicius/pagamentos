@@ -21,16 +21,16 @@ class CompanyController extends Controller
         return  $this->companyService->store($request->validated());
     }
 
-    public function show(Request $request) : array {
-        return $this->companyService->show();
+    public function index() {
+        return $this->companyService->index();
     }
 
-    public function update(StoreRequest $request, $uuid) : CompanyResource {
-        return $this->companyService->update($request->validated(), $uuid);
+    public function update(StoreRequest $request) : CompanyResource {
+        return $this->companyService->update($request->route('companyUuid'), $request->validated());
 
     }
 
-    public function showByUuid(Request $request, $uuid) : CompanyResource {
-        return $this->companyService->showByUuid($uuid);
+    public function show(Request $request) : CompanyResource {
+        return $this->companyService->show($request->route('companyUuid'));
     }
 }

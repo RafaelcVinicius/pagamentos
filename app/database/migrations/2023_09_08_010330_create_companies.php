@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique();
+            $table->bigInteger('user_id');
             $table->string('email', 100);
             $table->string('business_name', 100);
             $table->string('cnpjcpf', 14);
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

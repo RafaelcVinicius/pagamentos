@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments_intention', function (Blueprint $table) {
             $table->id();
-            $table->uuid("uuid");
+            $table->uuid("uuid")->unique();
             $table->bigInteger("company_id");
             $table->bigInteger("paymer_id");
             $table->bigInteger('payment_id')->nullable()->comment('id da venda payments');

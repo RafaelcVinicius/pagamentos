@@ -18,4 +18,8 @@ class Companies extends Model
     public function payments(){
         return $this->hasMany(Payments::class, 'company_id', 'id');
     }
+
+    public function payers(){
+        return $this->hasMany(payerss::class, 'company_id', 'id');
+    }
 }

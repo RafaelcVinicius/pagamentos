@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\GatewayController;
 use App\Http\Controllers\pagamentosController;
+use App\Http\Controllers\PayerController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentIntentionController;
 use Illuminate\Http\Request;
@@ -30,10 +30,19 @@ Route::prefix('v1')->group(function (){
             });
         });
 
+        Route::prefix('payers')->group(function (){
+            Route::post('/', [PayerController::class, 'store']);
+            Route::get('/', [PayerController::class, 'index']);
+            Route::prefix('{payersUuid}')->group(function () {
+                Route::put('/', [PayerController::class, 'update']);
+                Route::get('/', [PayerController::class, 'show']);
+            });
+        });
+
         Route::prefix('payments')->group(function (){
             Route::post('/', [PaymentController::class, 'store']);
             Route::get('/', [PaymentController::class, 'show']);
-            Route::prefix('{uuid}')->group(function () {
+            Route::prefix('{paymentsUuid}')->group(function () {
                 Route::put('/', [PaymentController::class, 'update']);
                 Route::get('/', [PaymentController::class, 'showByUuid']);
             });
@@ -42,7 +51,7 @@ Route::prefix('v1')->group(function (){
         Route::prefix('intention')->group(function (){
             Route::post('/', [PaymentIntentionController::class, 'store']);
             Route::get('/', [PaymentIntentionController::class, 'index']);
-            Route::prefix('{uuid}')->group(function () {
+            Route::prefix('{intentionUuid}')->group(function () {
                 Route::put('/', [PaymentIntentionController::class, 'update']);
                 Route::get('/', [PaymentIntentionController::class, 'show']);
             });
@@ -51,7 +60,7 @@ Route::prefix('v1')->group(function (){
         Route::prefix('refund')->group(function (){
             Route::post('/', [PaymentIntentionController::class, 'store']);
             Route::get('/', [PaymentIntentionController::class, 'show']);
-            Route::prefix('{uuid}')->group(function () {
+            Route::prefix('{refundUuid}')->group(function () {
                 Route::put('/', [PaymentIntentionController::class, 'update']);
                 Route::get('/', [PaymentIntentionController::class, 'showByUuid']);
             });

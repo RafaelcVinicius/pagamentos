@@ -3,9 +3,10 @@
 namespace App\Services;
 
 use App\Http\Resources\PaymentIntentionResource;
-use App\Http\Resources\PaymerResource;
+use App\Http\Resources\payersResource;
 use App\Repositories\Contracts\PaymentIntentionRepositoryInterface;
 use App\Repositories\PaymentIntentionRepository;
+use Illuminate\Support\Facades\DB;
 
 class PaymentIntentionService
 {
@@ -18,7 +19,8 @@ class PaymentIntentionService
 
     public function store(array $data) : PaymentIntentionResource
     {
-        return new PaymentIntentionResource($this->paymentIntentionRepository->store($data));
+        $custumer = [];
+        return new PaymentIntentionResource($this->paymentIntentionRepository->store($this->prepareDataStore($data)));
     }
 
     public function index() : array
@@ -34,5 +36,14 @@ class PaymentIntentionService
     public function show(string $uuid) : PaymentIntentionResource
     {
         return new PaymentIntentionResource($this->paymentIntentionRepository->show($uuid));
+    }
+
+    private function prepareDataStore(array $data) : array
+    {
+        return array(
+            'uuid'          => DB::raw('gen_random_uuid()'),
+            'total_amount'  => $data['totalAmount'],
+            'webhook'       => $data['webHook'],
+        );
     }
 }

@@ -5,11 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Paymer extends Model
+class Payers extends Model
 {
     use HasFactory;
 
     public $timestamps = true;
     protected $primaryKey = 'id';
-    protected $table = 'paymer';
+    protected $table = 'payers';
+
+    protected $fillable = ['uuid', 'first_name', 'last_name', 'email', 'cnpjcpf'];
+
 }

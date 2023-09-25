@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('customers_mercado_pago', function (Blueprint $table) {
             $table->id();
             $table->bigInteger("gateway_customer_id")->unique()->comment('id do customer mercado pago');
-            $table->bigInteger("paymer_id");
+            $table->bigInteger("payers_id");
             $table->bigInteger("gateway_id");
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('paymer_id')->references('id')->on('payers');
+            $table->foreign('payers_id')->references('id')->on('payers');
             $table->foreign('gateway_id')->references('id')->on('gateway_mercado_pago');
         });
     }

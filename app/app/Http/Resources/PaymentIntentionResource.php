@@ -21,7 +21,7 @@ class PaymentIntentionResource extends JsonResource
             "company"           => $this->whenLoaded('company', function() {
                 return new CompanyResource($this->company);
             }),
-            "paymer"            => $this->whenLoaded('paymer', function() {
+            "payers"            => $this->whenLoaded('payers', function() {
                 return new CompanyResource($this->company);
             }),
             "dateCreate"        => $this->date_create,

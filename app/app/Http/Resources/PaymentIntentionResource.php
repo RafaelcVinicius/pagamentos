@@ -16,9 +16,16 @@ class PaymentIntentionResource extends JsonResource
     {
         return [
             "uuid" => $this->uuid,
-            "email" => $this->email,
-            "dateCreate" => $this->date_create,
-            "dateUpdate" => $this->date_update,
+            "total_amount"      => $this->total_amount,
+            "webhook"           => $this->webhook,
+            "company"           => $this->whenLoaded('company', function() {
+                return new CompanyResource($this->company);
+            }),
+            "paymer"            => $this->whenLoaded('paymer', function() {
+                return new CompanyResource($this->company);
+            }),
+            "dateCreate"        => $this->date_create,
+            "dateUpdate"        => $this->date_update,
         ];
     }
 }

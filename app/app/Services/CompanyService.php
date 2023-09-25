@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Resources\CompanyResource;
 use App\Repositories\CompanyRepository;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
 class CompanyService
@@ -36,7 +37,7 @@ class CompanyService
     private function prepareDataStore(array $data) : array
     {
         return array(
-            'uuid'          => (string) Uuid::uuid4(),
+            'uuid'          => DB::raw('gen_random_uuid()'),
             'email'         => $data['email'],
             'cnpjcpf'       => $data['cnpjCpf'],
             'business_name' => $data['businessName'],

@@ -5,7 +5,7 @@ namespace App\Repositories\Contracts;
 interface PaymentIntentionRepositoryInterface
 {
     public function store(array $data);
-    public function show();
+    public function index();
     public function update(array $data, string $uuid);
-    public function showByUuid(string $uuid);
+    public function show(string $uuid);
 }

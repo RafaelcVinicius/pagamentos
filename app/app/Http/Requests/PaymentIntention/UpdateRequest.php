@@ -4,7 +4,7 @@ namespace App\Http\Requests\PaymentIntention;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,9 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "paymerUuid"    => ['required', 'min:3', 'max:100', 'email'],
-            "totalAmount"   => ['required', 'min:3', 'max:100', 'email'],
-            "webHook"       => ['required', 'min:3', 'max:100', 'email'],
+            "paymerUuid"    => ['required', 'string', 'uuid'],
+            "totalAmount"   => ['required', 'decimal'],
+            "webHook"       => ['required', 'string', 'max:255'],
         ];
     }
 }

@@ -11,7 +11,7 @@ class PaymentIntentionRepository implements PaymentIntentionRepositoryInterface
         return PaymentsIntention::create($data);
     }
 
-    public function show() : array {
+    public function index() : array {
         return [];
     }
 
@@ -21,7 +21,7 @@ class PaymentIntentionRepository implements PaymentIntentionRepositoryInterface
         return $companies->update($data);
     }
 
-    public function showByUuid(string $uuid) : PaymentsIntention {
+    public function show(string $uuid) : PaymentsIntention {
        return PaymentsIntention::where('uuid', $uuid)->firstOrFail();
     }
 }

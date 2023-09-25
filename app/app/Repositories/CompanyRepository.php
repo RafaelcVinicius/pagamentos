@@ -10,7 +10,7 @@ class CompanyRepository implements CompanyRepositoryInterface
 {
     public function store(array $data) : Companies
     {
-        return Auth::user()->companies()->create($data);
+        return Auth::user()->companies()->create($data)->refresh();
     }
 
     public function index() : array

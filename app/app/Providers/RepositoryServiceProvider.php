@@ -8,6 +8,7 @@ use App\Repositories\Contracts\PayerRepositoryInterface;
 use App\Repositories\Contracts\PaymentIntentionRepositoryInterface;
 use App\Repositories\Contracts\PaymentRepositoryInterface;
 use App\Repositories\PayerRepository;
+use App\Repositories\PaymentIntentionRepository;
 use App\Repositories\PaymentRepository;
 use Illuminate\Support\ServiceProvider;
 

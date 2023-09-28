@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\payers\StoreRequest;
+use App\Http\Requests\Payer\StoreRequest;
 use App\Http\Resources\PayerResource;
 use App\Services\PayerService;
 use Illuminate\Http\Request;

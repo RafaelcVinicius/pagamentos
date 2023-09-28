@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('customers_mercado_pago', function (Blueprint $table) {
             $table->id();
             $table->bigInteger("gateway_customer_id")->unique()->comment('id do customer mercado pago');
-            $table->bigInteger("payers_id");
+            $table->bigInteger("payer_id");
             $table->bigInteger("gateway_id");
             $table->timestamps();
             $table->softDeletes();

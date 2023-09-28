@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->uuid("uuid")->unique();
             $table->bigInteger("company_id");
-            $table->bigInteger("payers_id");
+            $table->bigInteger("payer_id");
             $table->bigInteger('payment_id')->nullable()->comment('id da venda payments');
             $table->decimal('total_amount')->comment('Valor original da venda');
             $table->string('webhook');

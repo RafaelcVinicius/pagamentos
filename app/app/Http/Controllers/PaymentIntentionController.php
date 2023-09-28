@@ -20,7 +20,7 @@ class PaymentIntentionController extends Controller
         return  $this->paymentIntentionService->store($request->validated());
     }
 
-    public function index() : array {
+    public function index() {
         return $this->paymentIntentionService->index();
     }
 

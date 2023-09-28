@@ -9,22 +9,21 @@ use Illuminate\Support\Facades\Auth;
 class PayerRepository implements PayerRepositoryInterface
 {
     public function store(array $data) : Payers {
-        dd(Auth::user()->companies->payers->first());
-
-        return Auth::user()->companies->payers()->create($data)->refresh();
+        return Auth::user()->company->payers()->create($data)->refresh();
     }
 
-    public function index() : array {
-        return Auth::user()->companies->payers()->all();
+    public function index() {
+        return Auth::user()->company->payers()->get();
     }
 
     public function update(string $uuid, array $data) : Payers {
-        $companies = Auth::user()->companies->payers->where('uuid', $uuid)->firstOrFail();
+        $payer = Auth::user()->company->payers->where('uuid', $uuid)->firstOrFail();
+        $payer->update($data);
 
-        return $companies->update($data);
+        return $payer->refresh();
     }
 
     public function show(string $uuid) : Payers {
-       return Auth::user()->companies->payers->where('uuid', $uuid)->firstOrFail();
+       return Auth::user()->company->payers->where('uuid', $uuid)->firstOrFail();
     }
 }

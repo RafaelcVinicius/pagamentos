@@ -10,24 +10,24 @@ class CompanyRepository implements CompanyRepositoryInterface
 {
     public function store(array $data) : Companies
     {
-        return Auth::user()->companies()->create($data)->refresh();
+        return Auth::user()->company()->create($data)->refresh();
     }
 
     public function index() : array
     {
-        return Auth::user()->companies->all();
+        return Auth::user()->company->all();
     }
 
     public function update(string $uuid, array $data) : Companies
     {
-        $companies = Auth::user()->companies->where('uuid', $uuid)->firstOrFail();
-        $companies->update($data);
+        $company = Auth::user()->company->where('uuid', $uuid)->firstOrFail();
+        $company->update($data);
 
-        return $companies->refresh();
+        return $company->refresh();
     }
 
     public function show(string $uuid) : Companies
     {
-       return Auth::user()->companies->where('uuid', $uuid)->firstOrFail();
+       return Auth::user()->company->where('uuid', $uuid)->firstOrFail();
     }
 }

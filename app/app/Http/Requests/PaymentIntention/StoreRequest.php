@@ -22,9 +22,9 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "payersUuid"    => ['required', 'min:3', 'max:100', 'email'],
-            "totalAmount"   => ['required', 'min:3', 'max:100', 'email'],
-            "webHook"       => ['required', 'min:3', 'max:100', 'email'],
+            "payerUuid"    => ['required', 'uuid'],
+            "totalAmount"   => ['required', 'decimal:2'],
+            "webHook"       => ['required', 'string', 'min:10', 'max:100'],
         ];
     }
 }

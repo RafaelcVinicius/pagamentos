@@ -22,8 +22,6 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "payersUuid"    => ['required', 'string', 'uuid'],
-            "totalAmount"   => ['required', 'decimal'],
             "webHook"       => ['required', 'string', 'max:255'],
         ];
     }

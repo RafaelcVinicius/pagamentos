@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid("uuid")->unique();
             $table->bigInteger('gateway_payment_id')->unique()->comment('Id externo do gateway de pagamento');
             $table->bigInteger("company_id");
-            $table->bigInteger("payers_id");
+            $table->bigInteger("payer_id");
             $table->string('payment_type', 20)->comment('Tipo da transação ex: pix cartão...');
             $table->string('gateway', 2);
             $table->bigInteger('gateway_id');

@@ -13,6 +13,8 @@ class PaymentsIntention extends Model
     protected $primaryKey = 'id';
     protected $table = 'payments_intention';
 
+    protected $fillable = ['uuid', 'company_id', 'payment_id', 'payer_id', 'total_amount', 'webhook'];
+
     public function company(){
         return $this->hasOne(Company::class, 'id', 'company_id');
     }

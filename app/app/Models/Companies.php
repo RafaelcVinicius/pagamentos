@@ -19,7 +19,11 @@ class Companies extends Model
         return $this->hasMany(Payments::class, 'company_id', 'id');
     }
 
+    public function paymentsIntention(){
+        return $this->hasMany(PaymentsIntention::class, 'company_id', 'id');
+    }
+
     public function payers(){
-        return $this->hasMany(payerss::class, 'company_id', 'id');
+        return $this->hasMany(Payers::class, 'company_id', 'id');
     }
 }

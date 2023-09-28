@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (){
     Route::middleware(['keycloak'])->group(function () {
-        Route::prefix('company')->group(function (){
+        Route::prefix('companies')->group(function (){
             Route::get('/', [CompanyController::class, 'index']);
             Route::post('/', [CompanyController::class, 'store']);
             Route::prefix('{companyUuid}')->group(function () {
@@ -48,7 +48,7 @@ Route::prefix('v1')->group(function (){
             });
         });
 
-        Route::prefix('intention')->group(function (){
+        Route::prefix('intentions')->group(function (){
             Route::post('/', [PaymentIntentionController::class, 'store']);
             Route::get('/', [PaymentIntentionController::class, 'index']);
             Route::prefix('{intentionUuid}')->group(function () {
@@ -57,7 +57,7 @@ Route::prefix('v1')->group(function (){
             });
         });
 
-        Route::prefix('refund')->group(function (){
+        Route::prefix('refunds')->group(function (){
             Route::post('/', [PaymentIntentionController::class, 'store']);
             Route::get('/', [PaymentIntentionController::class, 'show']);
             Route::prefix('{refundUuid}')->group(function () {

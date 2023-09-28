@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\PayerCollection;
 use App\Http\Resources\PayerResource;
 use App\Repositories\Contracts\PayerRepositoryInterface;
 use App\Repositories\PayerRepository;
@@ -20,8 +21,8 @@ class PayerService
         return new PayerResource($this->payerRepository->store($this->prepareDataStore($data)));
     }
 
-    public function index() : PayerResource {
-        return new PayerResource($this->payerRepository->index());
+    public function index() : PayerCollection {
+        return new PayerCollection($this->payerRepository->index());
     }
 
     public function update(string $uuid, array $data) : PayerResource {

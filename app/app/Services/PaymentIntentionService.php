@@ -48,6 +48,7 @@ class PaymentIntentionService
             'payer_id'      => $payer->id,
             'total_amount'  => $data['totalAmount'],
             'webhook'       => $data['webHook'],
+            'gateway'       => $data['gateway'],
         );
     }
 }

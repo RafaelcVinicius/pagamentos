@@ -19,8 +19,8 @@ class PaymentController extends Controller
         return  $this->paymentService->store($request->validated());
     }
 
-    public function show(Request $request) : array {
-        return $this->paymentService->show();
+    public function index(Request $request) {
+        return $this->paymentService->index();
     }
 
     public function update(StoreRequest $request, $uuid) {
@@ -28,7 +28,7 @@ class PaymentController extends Controller
 
     }
 
-    public function showByUuid(Request $request, $uuid) {
-        return $this->paymentService->showByUuid($uuid);
+    public function show(Request $request, $uuid) {
+        return $this->paymentService->show($uuid);
     }
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('payers_id')->references('id')->on('payers');
+            $table->foreign('payer_id')->references('id')->on('payers');
             $table->foreign('gateway_id')->references('id')->on('gateway_mercado_pago');
         });
     }

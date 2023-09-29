@@ -41,10 +41,10 @@ Route::prefix('v1')->group(function (){
 
         Route::prefix('payments')->group(function (){
             Route::post('/', [PaymentController::class, 'store']);
-            Route::get('/', [PaymentController::class, 'show']);
+            Route::get('/', [PaymentController::class, 'index']);
             Route::prefix('{paymentsUuid}')->group(function () {
                 Route::put('/', [PaymentController::class, 'update']);
-                Route::get('/', [PaymentController::class, 'showByUuid']);
+                Route::get('/', [PaymentController::class, 'show']);
             });
         });
 

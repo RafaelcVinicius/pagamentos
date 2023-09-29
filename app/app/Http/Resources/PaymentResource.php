@@ -15,10 +15,12 @@ class PaymentResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "uuid" => $this->uuid,
-            "email" => $this->email,
-            "dateCreate" => $this->date_create,
-            "dateUpdate" => $this->date_update,
+            "uuid"                  => $this->uuid,
+            'payer'                 => $this->payer,
+            'origemAmount'          => $this->origem_amount,
+            'transectionAmount'     => $this->transection_amount,
+            'webHook'               => $this->webhook,
+            'gateway'               => $this->gateway,
         ];
     }
 }

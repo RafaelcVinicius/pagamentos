@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('refunds', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('payment_id')->comment('id da venda payments');
-            $table->bigInteger('payments_status_id')->comment('id status refund payments_status');
+            $table->bigInteger('payment_status_id')->comment('id status refund payments_status');
             $table->decimal('amount');
             $table->timestamps();
 
             $table->foreign('payment_id')->references('id')->on('payments');
-            $table->foreign('payments_status_id')->references('id')->on('payments_status');
+            $table->foreign('payment_status_id')->references('id')->on('payments_status');
         });
     }
 

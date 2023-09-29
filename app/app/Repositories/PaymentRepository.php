@@ -2,27 +2,28 @@
 
 namespace App\Repositories;
 
-use App\Models\Companies;
 use App\Models\Payments;
 use App\Repositories\Contracts\PaymentRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentRepository implements PaymentRepositoryInterface
 {
     public function store(array $data) : Payments {
-        return Payments::create($data);
+        return Auth::user()->company->payments()->create($data)->refresh();
     }
 
-    public function show() : array {
-        return [];
+    public function index() {
+        return Auth::user()->company->payments()->get();
     }
 
     public function update(array $data, string $uuid) : Payments {
-        $companies = Payments::where('uuid', $uuid)->firstOrFail();
+        $payment = Auth::user()->company->payments->where('uuid', $uuid)->firstOrFail();
+        $payment->update($data);
 
-        return $companies->update($data);
+        return $payment->refres();
     }
 
-    public function showByUuid(string $uuid) : Payments {
-       return Payments::where('uuid', $uuid)->firstOrFail();
+    public function show(string $uuid) : Payments {
+       return Auth::user()->company->payments->where('uuid', $uuid)->firstOrFail();
     }
 }

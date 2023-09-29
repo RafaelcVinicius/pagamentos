@@ -16,14 +16,14 @@ return new class extends Migration
             $table->uuid("uuid")->unique();
             $table->bigInteger("company_id");
             $table->bigInteger("payer_id");
-            $table->bigInteger('payment_id')->nullable()->comment('id da venda payments');
+            $table->string('gateway', 2);
+            $table->bigInteger('gateway_id');
             $table->decimal('total_amount')->comment('Valor original da venda');
             $table->string('webhook');
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies');
-            $table->foreign('payers_id')->references('id')->on('payers');
-            $table->foreign('payment_id')->references('id')->on('payments');
+            $table->foreign('payer_id')->references('id')->on('payers');
         });
     }
 

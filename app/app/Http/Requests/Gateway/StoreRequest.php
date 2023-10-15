@@ -22,7 +22,8 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'min:3', 'max:100', 'email'],
+            'mercadoPago' => ['required'],
+            'mercadoPago.code' => ['required'],
         ];
     }
 }

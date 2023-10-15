@@ -15,8 +15,11 @@ return new class extends Migration
             $table->id();
             // $table->integer("gateway_type");
             $table->bigInteger("company_id");
+            $table->string('user_id');
+            $table->string('refresh_token');
             $table->string('public_key');
             $table->string('access_token');
+            $table->dateTime('expires_in_at');
             $table->timestamps();
             $table->softDeletes();
 

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CompanyResource extends JsonResource
+class GatewayResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,10 @@ class CompanyResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "uuid" => $this->uuid,
-            "email" => $this->email,
-            "dateCreate" => $this->date_create,
-            "dateUpdate" => $this->date_update,
+            "mercadoPago" => [
+                "accessToken" => $this->access_token,
+                "publicKey" => $this->public_key,
+            ],
         ];
     }
 }

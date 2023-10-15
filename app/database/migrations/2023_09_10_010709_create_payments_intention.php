@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->uuid("uuid")->unique();
             $table->bigInteger("company_id");
-            $table->bigInteger("payer_id");
+            $table->bigInteger("payer_id")->nullable();
             $table->string('gateway', 2);
-            $table->bigInteger('gateway_id');
             $table->decimal('total_amount')->comment('Valor original da venda');
-            $table->string('webhook');
+            $table->char('origin', 1)->default(1)->comment('1 = sites externo, 2 = site interno');
+            $table->string('url_callback')->nullable();
+            $table->string('webhook')->nullable();
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies');

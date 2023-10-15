@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Gateway\StoreRequest;
+use App\Services\GatewayService;
 use Illuminate\Http\Request;
 
 class GatewayController extends Controller
@@ -14,20 +15,19 @@ class GatewayController extends Controller
         $this->gatewayService = $gatewayService;
     }
 
-    public function store(StoreRequest $request) : GatewayResource {
+    public function store(StoreRequest $request){
         return  $this->gatewayService->store($request->validated());
     }
 
-    public function show(Request $request) : array {
-        return $this->gatewayService->show();
+    public function index(Request $request) {
+        return $this->gatewayService->index();
     }
 
-    public function update(StoreRequest $request, $uuid) : GatewayResource {
+    public function update(StoreRequest $request, $uuid) {
         return $this->gatewayService->update($request->validated(), $uuid);
-
     }
 
-    public function showByUuid(Request $request, $uuid) : GatewayResource {
-        return $this->gatewayService->showByUuid($uuid);
+    public function show(Request $request, $uuid) {
+        return $this->gatewayService->show($uuid);
     }
 }

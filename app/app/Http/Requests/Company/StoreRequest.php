@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests\Company;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
 class StoreRequest extends FormRequest
 {

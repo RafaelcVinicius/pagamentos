@@ -26,4 +26,8 @@ class Companies extends Model
     public function payers(){
         return $this->hasMany(Payers::class, 'company_id', 'id');
     }
+
+    public function mercadoPago(){
+        return $this->hasOne(GatewayMercadoPago::class, 'company_id', 'id');
+    }
 }

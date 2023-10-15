@@ -40,14 +40,20 @@ class PaymentIntentionService
 
     private function prepareDataStore(array $data) : array
     {
-        $payerRepository = app(PayerRepositoryInterface::class);
-        $payer = $payerRepository->show($data['payerUuid']);
+        $payer = null;
+        if(array_key_exists('payerUuid', $data) && !empty($data['payerUuid']))
+        {
+            $payerRepository = app(PayerRepositoryInterface::class);
+            $payer = $payerRepository->show($data['payerUuid']);
+        }
 
         return array(
             'uuid'          => DB::raw('gen_random_uuid()'),
-            'payer_id'      => $payer->id,
+            'payer_id'      => $payer?->id ?? null,
+            'origen'        => empty($payer) ? '2' : '1',
             'total_amount'  => $data['totalAmount'],
             'webhook'       => $data['webHook'],
+            'url_callback'  => $data['urlCallback'],
             'gateway'       => $data['gateway'],
         );
     }

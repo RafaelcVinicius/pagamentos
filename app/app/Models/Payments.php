@@ -23,7 +23,7 @@ class Payments extends Model
     }
 
     public function payer(){
-        return $this->hasOne(payers::class, 'id', 'payers_id');
+        return $this->hasOne(Payers::class, 'id', 'payers_id');
     }
 
     public function paymentIntention(){

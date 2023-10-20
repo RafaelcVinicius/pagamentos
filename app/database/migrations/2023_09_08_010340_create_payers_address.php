@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers_mercado_pago', function (Blueprint $table) {
+        Schema::create('payers_address', function (Blueprint $table) {
             $table->id();
-            $table->string("gateway_customer_id", 25)->unique()->comment('id do customer mercado pago');
             $table->bigInteger("payer_id");
+            $table->string('zip_code', 10);
+            $table->string('street_name', 100);
+            $table->integer('street_number', 6);
+            $table->string('city', 100);
             $table->timestamps();
 
             $table->foreign('payer_id')->references('id')->on('payers');
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers_mercado_pago');
+        Schema::dropIfExists('payers_address');
     }
 };

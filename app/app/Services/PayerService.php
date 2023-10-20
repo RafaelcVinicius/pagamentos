@@ -41,6 +41,12 @@ class PayerService
             'last_name'     => $data['lastName'],
             'email'         => $data['email'],
             'cnpjcpf'       => $data['cnpjCpf'],
+            "address" =>    [
+                "zip_code" =>       $data['address']['zipCode'],
+                "street_name" =>    $data['address']['streetName'],
+                "street_number" =>  $data['address']['streetNumber'],
+                "city" =>           $data['address']['city'],
+            ],
         );
     }
 

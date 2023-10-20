@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\ItemNotFoundException;
 use Illuminate\Validation\ValidationException;
@@ -42,6 +43,13 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function(ItemNotFoundException $e) {
+            return response()->json([
+                'type' => get_class($e),
+                'message' => $e->getMessage(),
+            ], 404);
+        });
+
+        $this->renderable(function(Exception $e) {
             return response()->json([
                 'type' => get_class($e),
                 'message' => $e->getMessage(),

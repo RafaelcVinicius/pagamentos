@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Auth;
 class PayerRepository implements PayerRepositoryInterface
 {
     public function store(array $data) : Payers {
-        return Auth::user()->company->payers()->create($data)->refresh();
+        $payers = Auth::user()->company->payers()->create($data)->refresh();
+        $payers->address()->create($data['address']);
+        return $payers->refresh();
     }
 
     public function index() {

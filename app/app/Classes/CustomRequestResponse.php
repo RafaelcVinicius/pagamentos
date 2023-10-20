@@ -3,7 +3,7 @@
 namespace App\Classes;
 
 class CustomRequestResponse {
-    public  $code,
+    private $code,
             $asJson,
             $asString;
 
@@ -17,5 +17,20 @@ class CustomRequestResponse {
             $this->asJson =     json_decode($curlBody) ?? null;
             $this->asString =   $curlBody;
         }
+    }
+
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    public function getAsJson()
+    {
+        return $this->asJson;
+    }
+
+    public function getAsString()
+    {
+        return $this->asString;
     }
 }

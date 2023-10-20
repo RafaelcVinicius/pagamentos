@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Http\Resources\PayerResource;
 use App\Http\Resources\PaymentIntentionCollection;
 use App\Http\Resources\PaymentIntentionResource;
+use App\Repositories\Contracts\Gateways\MercadoPagoRepositoryInterface;
 use App\Repositories\Contracts\PayerRepositoryInterface;
 use App\Repositories\Contracts\PaymentIntentionRepositoryInterface;
 use App\Repositories\PaymentIntentionRepository;
@@ -45,6 +47,21 @@ class PaymentIntentionService
         {
             $payerRepository = app(PayerRepositoryInterface::class);
             $payer = $payerRepository->show($data['payerUuid']);
+
+            switch($data['gateway'])
+            {
+                case "MP":
+                    if(empty($payer->mercadoPago))
+                    {
+                        $mercadoPagoRepository = app(MercadoPagoRepositoryInterface::class);
+                        $payerMP = $mercadoPagoRepository->showByEmailPayer($payer->email);
+                        if(empty($payerMP))
+                            $payerMP = $mercadoPagoRepository->createPayer(new PayerResource($payer));
+                        else
+                            $payer->mercadoPago()->create(['gateway_customer_id' => $payerMP['id']])->refresh();
+                    }
+                break;
+            }
         }
 
         return array(

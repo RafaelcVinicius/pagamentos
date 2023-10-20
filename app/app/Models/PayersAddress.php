@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CustomersMercadoPago extends Model
+class PayersAddress extends Model
 {
     use HasFactory;
 
     public $timestamps = true;
     protected $primaryKey = 'id';
-    protected $table = 'customers_mercado_pago';
+    protected $table = 'payers_address';
 
-    protected $fillable = ['gateway_customer_id'];
+    protected $fillable = ['payer_id', 'zip_code', 'street_name', 'street_number', 'city'];
 }

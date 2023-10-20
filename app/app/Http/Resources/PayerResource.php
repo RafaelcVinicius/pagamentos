@@ -20,6 +20,7 @@ class PayerResource extends JsonResource
             "firstName"     => $this->first_name,
             "lastName"      => $this->last_name,
             "cnpjCpf"       => $this->cnpjcpf,
+            "address"       => new PayerAddressResource($this->address),
             "dateCreate"    => $this->created_at,
             "dateUpdate"    => $this->updated_at,
         ];

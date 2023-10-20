@@ -15,9 +15,6 @@ class GatewayRepository implements GatewayRepositoryInterface
         {
             $mercadoPagoRepository = app(MercadoPagoRepositoryInterface::class);
             $auth = $mercadoPagoRepository->auth( $data["mercadoPago"]);
-            if($auth){
-                Auth::user()->company->mercadoPago()->create($this->prepareDataAuthMP($auth))->refresh();
-            }
         }
 
         return Auth::user()->company;
@@ -36,16 +33,5 @@ class GatewayRepository implements GatewayRepositoryInterface
 
     public function show(string $type) : Companies {
        return Auth::user()->company->mercadoPago->firstOrFail();
-    }
-
-    private function prepareDataAuthMP(array $data){
-        $date = new Carbon();
-        return array(
-            "user_id" =>        $data["user_id"],
-            "access_token" =>   $data["access_token"],
-            "public_key" =>     $data["public_key"],
-            "refresh_token" =>  $data["refresh_token"],
-            "expires_in_at" =>  $date->addSeconds($data["expires_in"]),
-        );
     }
 }

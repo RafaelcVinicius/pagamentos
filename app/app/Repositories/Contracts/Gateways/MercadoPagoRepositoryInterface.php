@@ -2,10 +2,12 @@
 
 namespace App\Repositories\Contracts\Gateways;
 
+use App\Http\Resources\PayerResource;
+
 interface MercadoPagoRepositoryInterface
 {
     public function auth(array $data);
-    public function store(array $data);
-    public function update(string $uuid, array $data);
+    public function createPayer(PayerResource $data);
+    public function showByEmailPayer(string $email);
     public function show(string $uuid);
 }

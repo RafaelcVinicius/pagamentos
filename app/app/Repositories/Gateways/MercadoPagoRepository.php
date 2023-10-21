@@ -5,8 +5,10 @@ namespace App\Repositories\Gateways;
 use App\Classes\CustomRequest;
 use App\Http\Resources\PayerResource;
 use App\Models\Companies;
+use App\Models\CustomersMercadoPago;
 use App\Models\GatewayMercadoPago;
 use App\Repositories\Contracts\Gateways\MercadoPagoRepositoryInterface;
+use App\Repositories\Contracts\PayerRepositoryInterface;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -74,7 +76,7 @@ class MercadoPagoRepository implements MercadoPagoRepositoryInterface
             "Authorization" =>  "Bearer " . $this->mercadoPago->access_token,
         ]);
 
-        if($req->get() && in_array($req->response->getCode(), [200]))
+        if($req->get() && in_array($req->response->getCode(), [200]) && $req->response->getAsJson()->paging->total > 0)
         {
             Log::info($req->response->getAsString());
             return json_decode(json_encode($req->response->getAsJson()->results[0]), true);
@@ -87,7 +89,7 @@ class MercadoPagoRepository implements MercadoPagoRepositoryInterface
         }
     }
 
-    public function createPayer(PayerResource $data) : array
+    public function createPayer(PayerResource $data) : CustomersMercadoPago
     {
         $req = new CustomRequest();
         $req->setRoute(config("constants.API_MP_URL")."/v1/customers");
@@ -100,7 +102,7 @@ class MercadoPagoRepository implements MercadoPagoRepositoryInterface
         if($req->post() && in_array($req->response->getCode(), [201, 200]))
         {
             Log::info(json_encode($req->response->getAsString()));
-            return $req->response->getAsJson();
+            return $this->savePayerToDB($data['uuid'], json_decode(json_encode($req->response->getAsJson()), true));
         }
         else
         {
@@ -109,17 +111,11 @@ class MercadoPagoRepository implements MercadoPagoRepositoryInterface
         }
     }
 
-    public function update(string $uuid, array $data) : Companies
+    public function savePayerToDB(string $uuid, array $data) : CustomersMercadoPago
     {
-        $company = Auth::user()->company->where('uuid', $uuid)->firstOrFail();
-        $company->update($data);
-
-        return $company->refresh();
-    }
-
-    public function show(string $uuid) : Companies
-    {
-       return Auth::user()->company->where('uuid', $uuid)->firstOrFail();
+        $payerRepository = app(PayerRepositoryInterface::class);
+        $payer = $payerRepository->show($uuid);
+        return $payer->mercadoPago()->create(['gateway_customer_id' => $data['id']])->refresh();
     }
 
     private function prepareDataAuth(array $data){
@@ -138,9 +134,9 @@ class MercadoPagoRepository implements MercadoPagoRepositoryInterface
         return array(
             "address" =>        [
                 "id" => $data->address->id,
-                "zip_code" => $data->address->zipCode,
-                "street_name" => $data->address->streetName,
-                "street_number" => $data->address->streetNumber,
+                "zip_code" => $data->address->zip_code,
+                "street_name" => $data->address->street_name,
+                "street_number" => $data->address->street_number,
                 "city" => [
                     "name" => $data->address->city,
                 ],
@@ -149,18 +145,18 @@ class MercadoPagoRepository implements MercadoPagoRepositoryInterface
             "date_registered" => $date,
 
             "email" => $data->email,
-            "first_name"=> $data->firstName,
-            "last_name"=> $data->lastName,
+            "first_name"=> $data->first_name,
+            "last_name"=> $data->last_name,
             // "phone" => [
             //   "area_code" => $data->email,
             //   "number" => $data->email,
             // ],
 
             "identification" => [
-                "type" => Strlen($data->cnpjCpf) > 11 ? "CNPJ" : "CPF",
-                "number" => $data->cnpjCpf,
+                "type" => Strlen($data->cnpjcpf) > 11 ? "CNPJ" : "CPF",
+                "number" => $data->cnpjcpf,
             ],
-            "description" => $data->firstName . " " . $data->lastName,
+            "description" => $data->first_name . " " . $data->last_name,
         );
     }
 }

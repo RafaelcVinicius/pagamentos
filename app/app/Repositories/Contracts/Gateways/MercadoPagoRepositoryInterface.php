@@ -8,6 +8,6 @@ interface MercadoPagoRepositoryInterface
 {
     public function auth(array $data);
     public function createPayer(PayerResource $data);
+    public function savePayerToDB(string $uuis, array $data);
     public function showByEmailPayer(string $email);
-    public function show(string $uuid);
 }

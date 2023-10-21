@@ -27,7 +27,7 @@ class StoreRequest extends FormRequest
             'email' =>          ['required', 'min:3', 'max:100', 'email'],
             "cnpjCpf"=>         ['required', 'string', 'min:11', 'max:14'],
             "address" =>        ['required', 'array'],
-            "address.zipCode" =>        ['required', 'string', 'min:6', 'max:10'],
+            "address.zipCode" =>        ['required', 'string', 'min:8', 'max:10'],
             "address.streetName" =>     ['required', 'string', 'min:3', 'max:100'],
             "address.streetNumber" =>   ['required', 'int', 'min:1', 'max:6'],
             "address.city" =>           ['required', 'string', 'min:3', 'max:100'],

@@ -58,7 +58,7 @@ class PaymentIntentionService
                         if(empty($payerMP))
                             $payerMP = $mercadoPagoRepository->createPayer(new PayerResource($payer));
                         else
-                            $payer->mercadoPago()->create(['gateway_customer_id' => $payerMP['id']])->refresh();
+                            $payerMP = $mercadoPagoRepository->savePayerToDB($payer->uuid, $payerMP);
                     }
                 break;
             }

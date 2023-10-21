@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger("payer_id");
             $table->string('zip_code', 10);
             $table->string('street_name', 100);
-            $table->integer('street_number', 6);
+            $table->integer('street_number');
             $table->string('city', 100);
             $table->timestamps();
 

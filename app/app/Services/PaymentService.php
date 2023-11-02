@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Resources\PaymentCollection;
 use App\Http\Resources\PaymentResource;
 use App\Repositories\Contracts\PayerRepositoryInterface;
+use App\Repositories\Contracts\PaymentIntentionRepositoryInterface;
 use App\Repositories\Contracts\PaymentRepositoryInterface;
 use App\Repositories\PaymentRepository;
 use Illuminate\Support\Facades\DB;
@@ -36,16 +37,42 @@ class PaymentService
 
     private function prepareDataStore(array $data) : array
     {
-        $payerRepository = app(PayerRepositoryInterface::class);
-        $payer = $payerRepository->show($data['payerUuid']);
+        $paymentIntentionRepository = app(PaymentIntentionRepositoryInterface::class);
+        $paymentIntention = $paymentIntentionRepository->show($data['paymentIntentionUuid']);
+
+        if($paymentIntention->payer_id)
+        {
+            $payerRepository = app(PayerRepositoryInterface::class);
+            $payer = $payerRepository->showById($paymentIntention->payer_id);
+
+            $payer =  [
+                'type'              => "customer",
+                'id'                => $payer->mercadoPago->gateway_customer_id,
+                'email'             => $payer->email,
+                'identification'    => [
+                    "type" => Strlen($payer->cnpjcpf) > 11 ? "CNPJ" : "CPF",
+                    "number" => $payer->cnpjcpf,
+                ],
+                'first_name'        => $payer->first_name,
+                'last_name'         => $payer->last_name,
+            ];
+        }
+        else
+        {
+            $payer =  [
+                'type'      => "guest",
+                'email'     => $data['email'],
+            ];
+        }
 
         return array(
-            'uuid'          => DB::raw('gen_random_uuid()'),
-            'payer_id'      => $payer->id,
-            'payment_type'  => $data['paymentType'],
-            'origem_amount' => $data['origemAmount'],
-            'webhook'       => $data['webHook'],
-            'gateway'       => $data['gateway'],
+            'uuid'                  => DB::raw('gen_random_uuid()'),
+            'payment_method_id'     => $data['paymentMethodId'],
+            'issuer_id'             => $data['issuerId'],
+            'token'                 => $data['token'],
+            'installments'          => $data['installments'],
+            'transaction_amount'    => $paymentIntention->total_amount,
+            'payer'                 => $payer
         );
     }
 }

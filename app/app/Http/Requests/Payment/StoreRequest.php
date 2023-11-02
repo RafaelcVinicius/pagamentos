@@ -22,11 +22,12 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "payerUuid"     => ['required', 'uuid'],
-            "paymentType"  => ['required', 'string', 'min:3', 'max:20'],
-            "origemAmount"  => ['required', 'decimal:0,2'],
-            "gateway"       => ['required', 'string', 'min:1', 'max:2'],
-            "webHook"       => ['required', 'string', 'min:10', 'max:100'],
+            "paymentIntentionUuid"      => ['required', 'uuid'],
+            "paymentMethodId"           => ['required', 'int', 'min:1'],
+            "issuerId"                  => ['required', 'int', 'min:1'],
+            "token"                     => ['required', 'string', 'min:10', 'max:100'],
+            "installments"              => ['required', 'int', 'min:1'],
+            "email"                     => ['email'],
         ];
     }
 }

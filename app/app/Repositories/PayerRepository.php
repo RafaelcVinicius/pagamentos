@@ -28,4 +28,8 @@ class PayerRepository implements PayerRepositoryInterface
     public function show(string $uuid) : Payers {
        return Auth::user()->company->payers->where('uuid', $uuid)->firstOrFail();
     }
+
+    public function showById(string $id) : Payers {
+        return Auth::user()->company->payers->where('id', $id)->firstOrFail();
+    }
 }

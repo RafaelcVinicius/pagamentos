@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class PaymentRepository implements PaymentRepositoryInterface
 {
     public function store(array $data) : Payments {
+        dd($data);
         return Auth::user()->company->payments()->create($data)->refresh();
     }
 

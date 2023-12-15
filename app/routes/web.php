@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/',    [pagamentosController::class, 'index']);
+Route::get('/',           [pagamentosController::class, 'index']);
 Route::get('/success',    [pagamentosController::class, 'success']);
 Route::get('/pending',    [pagamentosController::class, 'pending']);
 Route::get('/failure',    [pagamentosController::class, 'failure']);

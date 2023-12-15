@@ -14,8 +14,3 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/',    [pagamentosController::class, 'index']);
-Route::post('/create',    [pagamentosController::class, 'create']);
-Route::get('/payment/{id}',    [pagamentosController::class, 'paymentByCompany'])->name("payment");
-Route::get('/show/{id}',    [pagamentosController::class, 'show']);

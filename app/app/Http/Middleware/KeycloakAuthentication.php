@@ -22,7 +22,7 @@ class KeycloakAuthentication
     {
         $token = $request->bearerToken(); // Assumindo que o token está no cabeçalho de autorização
 
-        if (!($token || str_contains($request->route()->uri, 'api/v1/intentions') || str_contains($request->route()->uri, 'api/v1/payments'))) {
+        if (!($token || str_contains($request->route()->uri, 'api/v1/intentions') || str_contains($request->route()->uri, 'api/v1/payments') || str_contains($request->route()->uri, 'webhook'))) {
             if($request->route())
             return response()->json(['message' => 'Token de acesso ausente'], 401);
         }

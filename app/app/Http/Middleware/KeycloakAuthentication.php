@@ -71,6 +71,8 @@ class KeycloakAuthentication
                 }
             }
 
+            Log::info(json_encode($user));
+
             if($user)
                 Auth::attempt(['email' => $user->email, 'password' =>  $user->uuid]);
 

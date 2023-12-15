@@ -4,7 +4,6 @@ namespace App\Repositories\Gateways;
 
 use App\Classes\CustomRequest;
 use App\Http\Resources\PayerResource;
-use App\Models\Companies;
 use App\Models\CustomersMercadoPago;
 use App\Models\GatewayMercadoPago;
 use App\Repositories\Contracts\Gateways\PaymentGatewayRepositoryInterface;
@@ -65,10 +64,34 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
         }
     }
 
+    public function createPreferences(array $data) : array
+    {
+        Log::info("MercadoPagoRepository@createPreferences");
+
+        $req = new CustomRequest();
+        $req->setRoute(config("constants.API_MP_URL")."/checkout/preferences");
+        $req->setHeaders([
+            "Content-Type" => "application/json",
+            "Authorization" =>  "Bearer " . $this->mercadoPago->access_token,
+            "x-integrator-id" =>  config('constants.X_INTEGRATOR_ID'),
+        ])
+        ->setBody(json_encode($data));
+
+        if($req->post() && $req->response->getCode() == 201)
+        {
+            Log::info(json_encode($req->response->getAsString()));
+            return json_decode(json_encode($req->response->getAsJson()), true);
+        }
+        else
+        {
+            Log::info(json_encode($req->response->getAsString()));
+            throw new Exception("Error get Token auth");
+        }
+    }
+
     public function createPayment(array $data) : array
     {
         Log::info("MercadoPagoRepository@createPayment");
-        Log::info(json_encode($data));
 
         $req = new CustomRequest();
         $req->setRoute(config("constants.API_MP_URL")."/v1/payments");

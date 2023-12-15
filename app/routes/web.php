@@ -14,3 +14,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/',    [pagamentosController::class, 'index']);
+Route::get('/success',    [pagamentosController::class, 'success']);
+Route::get('/pending',    [pagamentosController::class, 'pending']);
+Route::get('/failure',    [pagamentosController::class, 'failure']);

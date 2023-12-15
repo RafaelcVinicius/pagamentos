@@ -24,10 +24,11 @@ class StoreRequest extends FormRequest
         return [
             "payerUuid"     => ['uuid'],
             "origin"        => ['string', 'max:1'],
-            "totalAmount"   => ['required', 'decimal:2'],
+            "totalAmount"   => ['required', 'numeric'],
             "gateway"       => ['required', 'string', 'min:1', 'max:2'],
             "urlCallback"   => ['required', 'string', 'min:10', 'max:100'],
             "webHook"       => ['required', 'string', 'min:10', 'max:100'],
+            "items"         => ['array'],
         ];
     }
 }

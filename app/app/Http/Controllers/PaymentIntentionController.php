@@ -32,4 +32,8 @@ class PaymentIntentionController extends Controller
     public function show(Request $request, $uuid) {
         return $this->paymentIntentionService->show($uuid);
     }
+
+    public function webhook(Request $request, $uuid) {
+        return $this->paymentIntentionService->webhook($request->all(), $uuid);
+    }
 }

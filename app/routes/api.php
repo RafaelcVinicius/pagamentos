@@ -64,6 +64,7 @@ Route::prefix('v1')->group(function (){
             Route::prefix('{intentionUuid}')->group(function () {
                 Route::put('/', [PaymentIntentionController::class, 'update']);
                 Route::get('/', [PaymentIntentionController::class, 'show']);
+                Route::post('/webhook', [PaymentIntentionController::class, 'webhook']);
             });
         });
 

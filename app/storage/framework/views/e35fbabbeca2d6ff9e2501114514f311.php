@@ -68,3 +68,4 @@
     </script>
 </body>
 </html>
+<?php /**PATH /var/www/html/resources/views/createCompany.blade.php ENDPATH**/ ?>

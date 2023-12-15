@@ -20,6 +20,7 @@ class PaymentIntentionResource extends JsonResource
             "webhook"           => $this->webhook,
             "gateway"           => $this->gateway,
             "origin"            => $this->origin,
+            "preferencesId"     => $this->preferences_id,
             "company"           => $this->when($this->company, function() {
                 return new CompanyResource($this->company);
             }),

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('last_name', 30);
             $table->string('email', 100);
             $table->string('cnpjcpf', 14);
+            $table->string('phone', 11);
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies');

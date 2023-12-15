@@ -69,7 +69,7 @@ class PaymentService
                 'id'                => $payer->mercadoPago->gateway_customer_id,
                 'email'             => $payer->email,
                 'identification'    => [
-                    "type" => Strlen($payer->cnpjcpf) > 11 ? "CNPJ" : "CPF",
+                    "type" => strlen($payer->cnpjcpf) > 11 ? "CNPJ" : "CPF",
                     "number" => $payer->cnpjcpf,
                 ],
                 'first_name'        => $payer->first_name,
@@ -85,7 +85,7 @@ class PaymentService
         }
 
         return array(
-            'notification_url'      => "https://payment.rafaelcoldebella.com.br/v1/payments/". $data['uuid'] . "/webhook",
+            'notification_url'      => config("constants.APP_URL"). "/v1/payments/". $data['uuid'] . "/webhook",
             'external_reference'    => $data['uuid'],
             'payment_method_id'     => $data['paymentMethodId'],
             'issuer_id'             => $data['issuerId'],

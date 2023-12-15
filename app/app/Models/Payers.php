@@ -14,7 +14,7 @@ class Payers extends Model
     protected $primaryKey = 'id';
     protected $table = 'payers';
 
-    protected $fillable = ['uuid', 'first_name', 'last_name', 'email', 'cnpjcpf'];
+    protected $fillable = ['uuid', 'first_name', 'last_name', 'email', 'cnpjcpf', 'phone'];
 
     public function address(){
         return $this->hasOne(PayersAddress::class, 'payer_id', 'id');

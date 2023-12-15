@@ -50,26 +50,30 @@ class PaymentIntentionService
     {
         Log::info("webhook");
         Log::info(json_encode($data));
-        Log::info($data['data']['id']);
         Log::info($uuid);
-        $gateway = app(PaymentGatewayRepositoryInterface::class);
 
-        switch($data["type"]) {
-            case "payment":
-                $payment = $gateway->showPayment($data['data']['id']);
+        if(array_key_exists('data', $data) && !empty($data['data']['id'])){
+        Log::info($data['data']['id']);
+
+            $gateway = app(PaymentGatewayRepositoryInterface::class);
+
+            switch($data["type"]) {
+                case "payment":
+                    $payment = $gateway->showPayment($data['data']['id']);
+                    break;
+                case "plan":
+                    $payment = $gateway->showPayment($data['data']['id']);
+                    break;
+                case "subscription":
+                    $payment = $gateway->showPayment($data['data']['id']);
+                    break;
+                case "invoice":
+                    $payment = $gateway->showPayment($data['data']['id']);
+                    break;
+                case "point_integration_wh":
+                    // $_POST contém as informações relacionadas à notificação.
                 break;
-            case "plan":
-                $payment = $gateway->showPayment($data['data']['id']);
-                break;
-            case "subscription":
-                $payment = $gateway->showPayment($data['data']['id']);
-                break;
-            case "invoice":
-                $payment = $gateway->showPayment($data['data']['id']);
-                break;
-            case "point_integration_wh":
-                // $_POST contém as informações relacionadas à notificação.
-            break;
+            }
         }
         // return new PaymentIntentionResource($this->paymentIntentionRepository->show($uuid));
     }

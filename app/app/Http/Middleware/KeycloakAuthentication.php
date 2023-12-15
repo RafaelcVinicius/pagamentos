@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Payments;
 use App\Models\PaymentsIntention;
 use App\Models\User;
 use Closure;
@@ -25,17 +26,24 @@ class KeycloakAuthentication
 
         try {
             if(!$token){
-                if(str_contains($request->route()->uri, 'api/v1/intentions') && $request->method() == "GET")
+                if(str_contains($request->route()->uri, 'api/v1/intentions'))
                 {
                     $paymentsIntention = PaymentsIntention::where('uuid', $request->route('intentionUuid'))->firstOrFail();
                     $user =  $paymentsIntention->company->user;
                 }
-                else if(!(str_contains($request->route()->uri, 'api/v1/payments') || (str_contains($request->route()->uri, 'webhook') && $request->method() == "POST")))
+                else if(str_contains($request->route()->uri, 'api/v1/payments') && str_contains($request->route()->uri, 'webhook') && $request->method() == "POST")
+                {
+                    $payments = Payments::where('uuid', $request->route('paymentUuid'))->firstOrFail();
+                    $user =  $payments->paymentIntention->company->user;
+                }
+                else if(!(str_contains($request->route()->uri, 'api/v1/payments')))
                 {
                     return response()->json(['message' => 'Token de acesso ausente!'], 401);
                 }
-
-                $user = null;
+                else
+                {
+                    $user = null;
+                }
             }
             else
             {

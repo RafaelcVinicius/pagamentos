@@ -17,10 +17,6 @@ class Payments extends Model
         'uuid', 'email', 'gateway_payment_id', 'payment_type', 'payment_intention_id', 'transection_amount'
     ];
 
-    public function company(){
-        return $this->hasOne(Companies::class, 'id', 'company_id');
-    }
-
     public function payer(){
         return $this->hasOne(Payers::class, 'id', 'payers_id');
     }
@@ -30,6 +26,6 @@ class Payments extends Model
     }
 
     public function paymentIntention(){
-        return $this->hasOne(PaymentsIntention::class, 'payment_id', 'id');
+        return $this->hasOne(PaymentsIntention::class, 'id', 'payment_intention_id');
     }
 }

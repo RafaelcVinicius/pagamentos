@@ -26,12 +26,12 @@ class KeycloakAuthentication
 
         try {
             if(!$token){
-                if(str_contains($request->route()->uri, 'api/v1/intentions'))
+                if(str_contains($request->route()->uri, 'api/v1/intentions') && $request->route('intentionUuid'))
                 {
                     $paymentsIntention = PaymentsIntention::where('uuid', $request->route('intentionUuid'))->firstOrFail();
                     $user =  $paymentsIntention->company->user;
                 }
-                else if(str_contains($request->route()->uri, 'api/v1/payments') && str_contains($request->route()->uri, 'webhook') && $request->method() == "POST")
+                else if(str_contains($request->route()->uri, 'api/v1/payments') && $request->method() == "POST" && $request->route('paymentUuid'))
                 {
                     $payments = Payments::where('uuid', $request->route('paymentUuid'))->firstOrFail();
                     $user =  $payments->paymentIntention->company->user;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\PaymentsIntention;
 use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
@@ -22,37 +23,47 @@ class KeycloakAuthentication
     {
         $token = $request->bearerToken(); // Assumindo que o token está no cabeçalho de autorização
 
-        if (!($token || str_contains($request->route()->uri, 'api/v1/intentions') || str_contains($request->route()->uri, 'api/v1/payments') || str_contains($request->route()->uri, 'webhook'))) {
-            if($request->route())
-            return response()->json(['message' => 'Token de acesso ausente'], 401);
-        }
-
         try {
-            // $publicKey = <<<EOD
-            //     -----BEGIN PUBLIC KEY-----
-            //     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1RW4tF4o0SY+cfGa/jTU1JwA3qgTArLMHE7vFyNXCXiwl2BSlMhmgfNwFYaffQ5k7kZLe2rdTDsz7Bs32F2ONxYZTOhodsnuR1QWb+o8vnpIvKvoNEq6Lcd6mDqD+CYDJLHFI29QW7Amw0owtgNiiGYhqyDnDhSKC9aDdD5CH32epoKc9f6tjCAZvC/pZqCSRvi9AtATJ5UBCH/ZVZyZJlTfPA0ZdfZVEDnOGjS5cRmP5Tc8PKt5NgP0PZPguwQdKnHwukoceUewFQuat7HYcU9tAPJsXfFn9GnlBf2H8nQ7oLn4sQ2CBlGgQLH2TwIyhvIBC1AEiYxvsm/pPE+qtwIDAQAB
-            //     -----END PUBLIC KEY-----
-            //     EOD;
+            if(!$token){
+                if(str_contains($request->route()->uri, 'api/v1/intentions') && $request->method() == "GET")
+                {
+                    $paymentsIntention = PaymentsIntention::where('uuid', $request->route('intentionUuid'))->firstOrFail();
+                    $user =  $paymentsIntention->company->user;
+                }
+                else if(!(str_contains($request->route()->uri, 'api/v1/payments') || (str_contains($request->route()->uri, 'webhook') && $request->method() == "POST")))
+                {
+                    return response()->json(['message' => 'Token de acesso ausente!'], 401);
+                }
+            }
+            else
+            {
+                $publicKey = <<<EOD
+                    -----BEGIN PUBLIC KEY-----
+                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxEuUpZlWvTU4xYY19y/SmpMMnPBmyE9KnvEtOiZN/UWM5krqh9CuIAvUplw1i8im7HRPW1Xz+YJRYAz72JVqxzNLxB0VAVjtlJFZ/M4R81MbKtMuk1U1WLC2wAiwyBsP+uI2HLERef0VdFCexrgGPi6jEvJjoAntZQzoL0Sfbp72u6IsGo9mFm8GWz1nwM1LvP/PJR8/w62lno9GEBeFCwAZQMS/A739UnxT7IpoI/JBXlYB79x/5sPG9jYQV8S4N1MwqA6tC2/lVaZyta5GheXPcTrc2rQ+shjYrPF9S7UQLZZWBE9ltgKFUJ8MI+Uf9CstBVP7kWG0t/SQbNutmQIDAQAB
+                    -----END PUBLIC KEY-----
+                    EOD;
 
-            // $decodedToken = JWT::decode($token, new Key($publicKey, 'RS256'));
+                $decodedToken = JWT::decode($token, new Key($publicKey, 'RS256'));
 
-            // $user = User::where('uuid', $decodedToken->sub)->first();
-            $user = User::first();
+                $user = User::where('uuid', $decodedToken->sub)->first();
 
-            // if(!$user){
-            //     $user = new User();
-            //     $user->uuid     = $decodedToken->sub;
-            //     $user->email    = $decodedToken->email;
-            //     $user->name     = $decodedToken->name;
-            //     $user->password = $decodedToken->preferred_username;
-            //     $user->save();
-            //     $user->refresh();
-            // }
+                if(!$user){
+                    $user = new User();
+                    $user->uuid     = $decodedToken->sub;
+                    $user->email    = $decodedToken->email;
+                    $user->name     = $decodedToken->name;
+                    $user->password = $decodedToken->sub;
+                    $user->save();
+                    $user->refresh();
+                }
+            }
 
-            Auth::attempt(['email' => $user->email, 'password' =>  'rafael']);
+            if($user)
+                Auth::attempt(['email' => $user->email, 'password' =>  $user->uuid]);
 
             return $next($request);
         } catch (\Exception $e) {
+            Log::info(json_encode($e));
             return response()->json(['message' => 'Token de acesso inválido'], 401);
         }
     }

@@ -30,4 +30,8 @@ class Companies extends Model
     public function mercadoPago(){
         return $this->hasOne(GatewayMercadoPago::class, 'company_id', 'id');
     }
+
+    public function user(){
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }

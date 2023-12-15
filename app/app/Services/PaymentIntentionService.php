@@ -48,6 +48,7 @@ class PaymentIntentionService
 
     public function webhook(array $data, string $uuid) : void
     {
+        Log::info("webhook");
         Log::info(json_encode($data));
         Log::info($uuid);
         // return new PaymentIntentionResource($this->paymentIntentionRepository->show($uuid));
@@ -121,7 +122,7 @@ class PaymentIntentionService
                 "failure" => config("constants.APP_URL")."/failure",
             ),
             "external_reference" => "vinicius.colde@gmail.com",
-            "notification_url" => config("constants.APP_URL")."/v1/intentions/" . $data['uuid'] . "/webhook",
+            "notification_url" => config("constants.APP_URL")."/api/v1/intentions/" . $data['uuid'] . "/webhook",
             "payment_methods"  => array(
                 "excluded_payment_methods" => [[
                     "id" => 'visa'

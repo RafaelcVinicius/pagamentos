@@ -85,7 +85,7 @@ class PaymentService
         }
 
         return array(
-            'notification_url'      => config("constants.APP_URL"). "/v1/payments/". $data['uuid'] . "/webhook",
+            'notification_url'      => config("constants.APP_URL"). "/api/v1/payments/". $data['uuid'] . "/webhook",
             'external_reference'    => $data['uuid'],
             'payment_method_id'     => $data['paymentMethodId'],
             'issuer_id'             => $data['issuerId'],

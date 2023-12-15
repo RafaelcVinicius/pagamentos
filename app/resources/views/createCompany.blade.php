@@ -18,7 +18,7 @@
             const obj =
             {
                 payerUuid: "fafff861-a91c-49a7-b8b8-e4a88eb54333",
-                totalAmount: 10.00,
+                totalAmount: 1500,
                 gateway: "MP",
                 urlCallback: "https://rafaelcoldebella.com.br",
                 webHook: "https://rafaelcoldebella.com.br/webHook",
@@ -30,7 +30,7 @@
                     category_id: "Celular",
                     quantity: 1,
                     currency_id: "BRL",
-                    unit_price: 10,
+                    unit_price: 1500,
                 }]
 
             }

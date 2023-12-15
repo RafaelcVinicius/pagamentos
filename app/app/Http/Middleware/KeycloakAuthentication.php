@@ -68,7 +68,6 @@ class KeycloakAuthentication
                 }
             }
 
-
             if($user)
                 Auth::attempt(['email' => $user->email, 'password' =>  $user->uuid]);
 

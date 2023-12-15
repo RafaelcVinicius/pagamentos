@@ -124,7 +124,7 @@ class PaymentIntentionService
             "notification_url" => config("constants.APP_URL")."/v1/intentions/" . $data['uuid'] . "/webhook",
             "payment_methods"  => array(
                 "excluded_payment_methods" => [[
-                    "id" => 'Visa'
+                    "id" => 'visa'
                 ]],
                 // "excluded_payment_types" => [[
                 //     "id" => 'visa',

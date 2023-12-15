@@ -34,6 +34,8 @@ class KeycloakAuthentication
                 {
                     return response()->json(['message' => 'Token de acesso ausente!'], 401);
                 }
+
+                $user = null;
             }
             else
             {

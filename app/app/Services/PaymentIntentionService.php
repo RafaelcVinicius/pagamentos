@@ -134,7 +134,7 @@ class PaymentIntentionService
             "items" => $data['items'],
             "payer" => array(
                 "name" => $payer->first_name,
-                "surname" => $payer->$payer->last_name,
+                "surname" => $payer->last_name,
                 "email" => $payer->email,
                 "phone" => array(
                     "area_code" => substr($payer->phone, 0, 2),

@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('refunds', function (Blueprint $table) {
+        Schema::create('payments_status', function (Blueprint $table) {
             $table->id();
-            $table->string('payment_id');
-            $table->decimal('amount');
+            $table->bigInteger("payment_id")->comment('id da venda payments');
             $table->string('status');
+            $table->string('detail');
             $table->timestamps();
+
+            $table->unique(['payment_id', 'status', 'detail']);
+
+            $table->foreign('payment_id')->references('id')->on('payments');
         });
     }
 
@@ -25,6 +29,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('refunds');
+        Schema::dropIfExists('payments_status');
+
     }
 };

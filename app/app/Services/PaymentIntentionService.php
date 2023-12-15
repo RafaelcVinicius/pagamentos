@@ -129,16 +129,16 @@ class PaymentIntentionService
                 // "excluded_payment_types" => [[
                 //     "id" => 'visa',
                 // ]],
+                "installments" => 6,
             ),
-            "installments" => 6,
             "items" => $data['items'],
             "payer" => array(
-                "name" => $payer->first_name . " " . $payer->last_name,
-                "surname" => $payer->first_name,
+                "name" => $payer->first_name,
+                "surname" => $payer->$payer->last_name,
                 "email" => $payer->email,
                 "phone" => array(
                     "area_code" => substr($payer->phone, 0, 2),
-                    "number" => substr($payer->phone, -strlen($payer->phone)-2)
+                    "number" => substr($payer->phone, 2, strlen($payer->phone)-2)
                 ),
                 "identification" => array(
                     "type" => strlen($payer->cnpjcpf) > 11 ? "CNPJ" : "CPF",

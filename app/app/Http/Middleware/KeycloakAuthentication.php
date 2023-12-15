@@ -20,11 +20,10 @@ class KeycloakAuthentication
      */
     public function handle(Request $request, Closure $next): Response
     {
-        Log::info("inicio");
-
         $token = $request->bearerToken(); // Assumindo que o token está no cabeçalho de autorização
 
-        if (!$token) {
+        if (!($token || str_contains($request->route()->uri, 'api/v1/intentions') || str_contains($request->route()->uri, 'api/v1/payments'))) {
+            if($request->route())
             return response()->json(['message' => 'Token de acesso ausente'], 401);
         }
 

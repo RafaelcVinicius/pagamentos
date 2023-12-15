@@ -18,6 +18,7 @@ class CompanyResource extends JsonResource
             "uuid"          => $this->uuid,
             "email"         => $this->email,
             "businessName"  => $this->business_name,
+            "gateway"       => new GatewayResource($this),
             "updatedAt"     => $this->updated_at,
             "createdAt"     => $this->created_at,
         ];

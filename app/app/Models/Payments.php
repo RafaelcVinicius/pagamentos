@@ -14,12 +14,11 @@ class Payments extends Model
     protected $table = 'payments';
 
     protected $fillable = [
-        'uuid', 'gateway_payment_id', 'company_id', 'payer_id', 'payment_id', 'payment_type', 'gateway',
-        'gateway_id', 'origem_amount', 'transection_amount', 'webaook'
+        'uuid', 'email', 'gateway_payment_id', 'payment_type', 'payment_intention_id', 'transection_amount'
     ];
 
     public function company(){
-        return $this->hasOne(Company::class, 'id', 'company_id');
+        return $this->hasOne(Companies::class, 'id', 'company_id');
     }
 
     public function payer(){

@@ -5,12 +5,13 @@ namespace App\Repositories;
 use App\Models\Payments;
 use App\Repositories\Contracts\PaymentRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PaymentRepository implements PaymentRepositoryInterface
 {
     public function store(array $data) : Payments {
-        dd($data);
-        return Auth::user()->company->payments()->create($data)->refresh();
+        Log::info(json_encode($data));
+        return Payments::create($data)->refresh();
     }
 
     public function index() {

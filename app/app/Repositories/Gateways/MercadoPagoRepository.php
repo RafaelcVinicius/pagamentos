@@ -7,14 +7,14 @@ use App\Http\Resources\PayerResource;
 use App\Models\Companies;
 use App\Models\CustomersMercadoPago;
 use App\Models\GatewayMercadoPago;
-use App\Repositories\Contracts\Gateways\MercadoPagoRepositoryInterface;
+use App\Repositories\Contracts\Gateways\PaymentGatewayRepositoryInterface;
 use App\Repositories\Contracts\PayerRepositoryInterface;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class MercadoPagoRepository implements MercadoPagoRepositoryInterface
+class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
 {
     private GatewayMercadoPago $mercadoPago;
 
@@ -52,7 +52,7 @@ class MercadoPagoRepository implements MercadoPagoRepositoryInterface
             "refresh_token" =>  $data["refreshToken"],
         ]);
 
-        if($req->post() && in_array($req->response->code(), [201, 200]))
+        if($req->post() && in_array($req->response->getCode(), [201, 200]))
         {
             Log::info(json_encode($req->response->getAsString()));
             Auth::user()->company->mercadoPago()->create($this->prepareDataAuth($req->response->getAsJson()))->refresh();
@@ -61,6 +61,31 @@ class MercadoPagoRepository implements MercadoPagoRepositoryInterface
         else
         {
             Log::info(json_encode($req->response->asString));
+            throw new Exception("Error get Token auth");
+        }
+    }
+
+    public function createPayment(array $data) : array
+    {
+        Log::info("MercadoPagoRepository@createPayment");
+        Log::info(json_encode($data));
+
+        $req = new CustomRequest();
+        $req->setRoute(config("constants.API_MP_URL")."/v1/payments");
+        $req->setHeaders([
+            "Content-Type" => "application/json",
+            "Authorization" =>  "Bearer " . $this->mercadoPago->access_token,
+        ])
+        ->setBody(json_encode($data));
+
+        if($req->post() && in_array($req->response->getCode(), [201, 200]))
+        {
+            Log::info(json_encode($req->response->getAsString()));
+            return json_decode(json_encode($req->response->getAsJson()), true);
+        }
+        else
+        {
+            Log::info(json_encode($req->response->getAsString()));
             throw new Exception("Error get Token auth");
         }
     }

@@ -2,13 +2,18 @@
 
 namespace App\Services;
 
+use App\Http\Resources\PayerResource;
 use App\Http\Resources\PaymentCollection;
 use App\Http\Resources\PaymentResource;
+use App\Repositories\Contracts\Gateways\PaymensGatewayRepositoryInterface;
+use App\Repositories\Contracts\Gateways\PaymentGatewayRepositoryInterface;
 use App\Repositories\Contracts\PayerRepositoryInterface;
 use App\Repositories\Contracts\PaymentIntentionRepositoryInterface;
 use App\Repositories\Contracts\PaymentRepositoryInterface;
 use App\Repositories\PaymentRepository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Nette\Utils\Floats;
 
 class PaymentService
 {
@@ -20,7 +25,11 @@ class PaymentService
     }
 
     public function store(array $data) : PaymentResource {
-        return new PaymentResource($this->paymentRepository->store($this->prepareDataStore($data)));
+        $gatewayRepository = app(PaymentGatewayRepositoryInterface::class);
+
+        $payment = $gatewayRepository->createPayment($this->prepareDataPaymentMercadoPago($data));
+
+        return new PaymentResource($this->paymentRepository->store($this->prepareDataStore($payment, $data)));
     }
 
     public function index(): PaymentCollection {
@@ -35,7 +44,7 @@ class PaymentService
         return new PaymentResource($this->paymentRepository->show($uuid));
     }
 
-    private function prepareDataStore(array $data) : array
+    private function prepareDataPaymentMercadoPago(array $data) : array
     {
         $paymentIntentionRepository = app(PaymentIntentionRepositoryInterface::class);
         $paymentIntention = $paymentIntentionRepository->show($data['paymentIntentionUuid']);
@@ -44,6 +53,13 @@ class PaymentService
         {
             $payerRepository = app(PayerRepositoryInterface::class);
             $payer = $payerRepository->showById($paymentIntention->payer_id);
+
+            if(!$payer->mercadoPago){
+                $gatewayRepository = app(PaymentGatewayRepositoryInterface::class);
+                $payerGateway = $gatewayRepository->createPayer(new PayerResource($payer));
+
+                $payer = $payerRepository->showById($paymentIntention->payer_id);
+            }
 
             $payer =  [
                 'type'              => "customer",
@@ -66,13 +82,27 @@ class PaymentService
         }
 
         return array(
-            'uuid'                  => DB::raw('gen_random_uuid()'),
             'payment_method_id'     => $data['paymentMethodId'],
             'issuer_id'             => $data['issuerId'],
             'token'                 => $data['token'],
             'installments'          => $data['installments'],
-            'transaction_amount'    => $paymentIntention->total_amount,
+            'transaction_amount'    => (float)$paymentIntention->total_amount,
             'payer'                 => $payer
+        );
+    }
+
+    private function prepareDataStore($payment, $data): array
+    {
+        $paymentIntentionRepository = app(PaymentIntentionRepositoryInterface::class);
+        $paymentIntention = $paymentIntentionRepository->show($data['paymentIntentionUuid']);
+
+        return array(
+            "uuid" => DB::raw('gen_random_uuid()'),
+            "email" => $data['email'],
+            "payment_intention_id" => $paymentIntention->id,
+            "gateway_payment_id" => $payment['id'],
+            "payment_type" => $data['paymentMethodId'],
+            "transection_amount" => $paymentIntention->total_amount,
         );
     }
 }

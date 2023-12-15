@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Repositories\CompanyRepository;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
 use App\Repositories\Contracts\GatewayRepositoryInterface;
-use App\Repositories\Contracts\Gateways\MercadoPagoRepositoryInterface;
+use App\Repositories\Contracts\Gateways\PaymentGatewayRepositoryInterface;
 use App\Repositories\Contracts\PayerRepositoryInterface;
 use App\Repositories\Contracts\PaymentIntentionRepositoryInterface;
 use App\Repositories\Contracts\PaymentRepositoryInterface;
@@ -61,7 +61,7 @@ class RepositoryServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-            MercadoPagoRepositoryInterface::class,
+            PaymentGatewayRepositoryInterface::class,
             MercadoPagoRepository::class
         );
     }

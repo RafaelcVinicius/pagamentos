@@ -15,10 +15,10 @@ class GatewayResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "mercadoPago" => [
-                "accessToken" => $this->access_token,
-                "publicKey" => $this->public_key,
-            ],
+            "mercadoPago" => $this->when($this->mercadopago, [
+                // "accessToken" => $this->mercadopago?->access_token,
+                "publicKey" => $this->mercadopago?->public_key,
+            ]),
         ];
     }
 }

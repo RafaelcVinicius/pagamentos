@@ -50,7 +50,27 @@ class PaymentIntentionService
     {
         Log::info("webhook");
         Log::info(json_encode($data));
+        Log::info($data['data']['id']);
         Log::info($uuid);
+        $gateway = app(PaymentGatewayRepositoryInterface::class);
+
+        switch($data["type"]) {
+            case "payment":
+                $payment = $gateway->showPayment($data['data']['id']);
+                break;
+            case "plan":
+                $payment = $gateway->showPayment($data['data']['id']);
+                break;
+            case "subscription":
+                $payment = $gateway->showPayment($data['data']['id']);
+                break;
+            case "invoice":
+                $payment = $gateway->showPayment($data['data']['id']);
+                break;
+            case "point_integration_wh":
+                // $_POST contém as informações relacionadas à notificação.
+            break;
+        }
         // return new PaymentIntentionResource($this->paymentIntentionRepository->show($uuid));
     }
 
@@ -151,7 +171,8 @@ class PaymentIntentionService
                     "street_number" => $payer->address->street_number,
                 ),
             ),
-            "statement_descriptor" => "Loja Azul"
+            "statement_descriptor" => "Loja Azul",
+            "total_amount" => $data['totalAmount'],
         );
     }
 }

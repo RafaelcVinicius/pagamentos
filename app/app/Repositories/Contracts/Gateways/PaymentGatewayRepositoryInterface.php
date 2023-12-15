@@ -8,6 +8,7 @@ interface PaymentGatewayRepositoryInterface
 {
     public function auth(array $data);
     public function createPreferences(array $data);
+    public function showPayment(string $uuid);
     public function createPayment(array $data);
     public function createPayer(PayerResource $data);
     public function savePayerToDB(string $uuis, array $data);

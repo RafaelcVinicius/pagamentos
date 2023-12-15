@@ -22,15 +22,12 @@ class KeycloakAuthentication
      */
     public function handle(Request $request, Closure $next): Response
     {
-        Log::info('KeycloakAuthentication');
-
         $token = $request->bearerToken(); // Assumindo que o token está no cabeçalho de autorização
 
         try {
             if(!$token){
                 if(str_contains($request->route()->uri, 'api/v1/intentions'))
                 {
-                    Log::info($request->route('intentionUuid'));
                     $paymentsIntention = PaymentsIntention::where('uuid', $request->route('intentionUuid'))->firstOrFail();
                     $user =  $paymentsIntention->company->user;
                 }
@@ -71,12 +68,9 @@ class KeycloakAuthentication
                 }
             }
 
-            Log::info(json_encode($user));
 
             if($user)
                 Auth::attempt(['email' => $user->email, 'password' =>  $user->uuid]);
-
-            Log::info('Fim KeycloakAuthentication');
 
             return $next($request);
         } catch (\Exception) {

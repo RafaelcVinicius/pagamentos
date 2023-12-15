@@ -91,10 +91,10 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
 
     public function showPayment(string $uuid) : array
     {
-        Log::info("MercadoPagoRepository@createPreferences");
+        Log::info("MercadoPagoRepository@showPayment");
 
         $req = new CustomRequest();
-        $req->setRoute(config("constants.API_MP_URL") . "/v1/payments" . $uuid);
+        $req->setRoute(config("constants.API_MP_URL") . "/v1/payments/" . $uuid);
         $req->setHeaders([
             "Content-Type" => "application/json",
             "Authorization" =>  "Bearer " . $this->mercadoPago->access_token,

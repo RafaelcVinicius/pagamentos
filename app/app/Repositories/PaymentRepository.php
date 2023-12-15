@@ -11,7 +11,11 @@ class PaymentRepository implements PaymentRepositoryInterface
 {
     public function store(array $data) : Payments {
         Log::info(json_encode($data));
-        return Payments::create($data)->refresh();
+
+        $payment = Payments::create($data)->refresh();
+        $payment->status()->create($data['status']);
+
+        return $payment->refresh();
     }
 
     public function index() {
@@ -27,5 +31,13 @@ class PaymentRepository implements PaymentRepositoryInterface
 
     public function show(string $uuid) : Payments {
        return Auth::user()->company->payments->where('uuid', $uuid)->firstOrFail();
+    }
+
+    public function webhook(string $uuid, array $data) : Payments {
+       return Auth::user()->company->payments->where('uuid', $uuid)->firstOrFail();
+    }
+
+    public function storeStatus(string $uuid, array $data) : Payments {
+        return Auth::user()->company->payments->where('uuid', $uuid)->status->create($data)->refres();
     }
 }

@@ -12,4 +12,8 @@ class PaymentsStatus extends Model
     public $timestamps = true;
     protected $primaryKey = 'id';
     protected $table = 'payments_status';
+
+    protected $fillable = [
+        'payment_id', 'status', 'detail'
+    ];
 }

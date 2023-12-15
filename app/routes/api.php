@@ -54,6 +54,7 @@ Route::prefix('v1')->group(function (){
             Route::prefix('{paymentUuid}')->group(function () {
                 Route::put('/', [PaymentController::class, 'update']);
                 Route::get('/', [PaymentController::class, 'show']);
+                Route::post('/webhook', [PaymentController::class, 'webhook']);
             });
         });
 

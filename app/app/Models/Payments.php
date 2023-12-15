@@ -25,6 +25,10 @@ class Payments extends Model
         return $this->hasOne(Payers::class, 'id', 'payers_id');
     }
 
+    public function status(){
+        return $this->hasOne(PaymentsStatus::class, 'payment_id', 'id');
+    }
+
     public function paymentIntention(){
         return $this->hasOne(PaymentsIntention::class, 'payment_id', 'id');
     }

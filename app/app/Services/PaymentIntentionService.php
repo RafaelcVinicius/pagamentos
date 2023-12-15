@@ -6,6 +6,7 @@ use App\Http\Resources\PayerResource;
 use App\Http\Resources\PaymentIntentionCollection;
 use App\Http\Resources\PaymentIntentionResource;
 use App\Repositories\Contracts\Gateways\MercadoPagoRepositoryInterface;
+use App\Repositories\Contracts\Gateways\PaymentGatewayRepositoryInterface;
 use App\Repositories\Contracts\PayerRepositoryInterface;
 use App\Repositories\Contracts\PaymentIntentionRepositoryInterface;
 use App\Repositories\PaymentIntentionRepository;
@@ -53,7 +54,7 @@ class PaymentIntentionService
                 case "MP":
                     if(empty($payer->mercadoPago))
                     {
-                        $mercadoPagoRepository = app(MercadoPagoRepositoryInterface::class);
+                        $mercadoPagoRepository = app(PaymentGatewayRepositoryInterface::class);
                         $payerMP = $mercadoPagoRepository->showByEmailPayer($payer->email);
                         if(empty($payerMP))
                             $payerMP = $mercadoPagoRepository->createPayer(new PayerResource($payer));

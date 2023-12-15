@@ -75,6 +75,7 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
         $req->setHeaders([
             "Content-Type" => "application/json",
             "Authorization" =>  "Bearer " . $this->mercadoPago->access_token,
+            "X-Idempotency-Key" =>  $data['external_reference'],
         ])
         ->setBody(json_encode($data));
 
@@ -157,7 +158,7 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
     private function prepareDataCreatePayer(PayerResource $data){
         $date = Carbon::now()->toIso8601String();
         return array(
-            "address" =>        [
+            "address" => [
                 "id" => $data->address->id,
                 "zip_code" => $data->address->zip_code,
                 "street_name" => $data->address->street_name,

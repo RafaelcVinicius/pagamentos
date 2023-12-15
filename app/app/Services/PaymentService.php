@@ -5,15 +5,13 @@ namespace App\Services;
 use App\Http\Resources\PayerResource;
 use App\Http\Resources\PaymentCollection;
 use App\Http\Resources\PaymentResource;
-use App\Repositories\Contracts\Gateways\PaymensGatewayRepositoryInterface;
 use App\Repositories\Contracts\Gateways\PaymentGatewayRepositoryInterface;
 use App\Repositories\Contracts\PayerRepositoryInterface;
 use App\Repositories\Contracts\PaymentIntentionRepositoryInterface;
 use App\Repositories\Contracts\PaymentRepositoryInterface;
 use App\Repositories\PaymentRepository;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Nette\Utils\Floats;
+use Ramsey\Uuid\Uuid;
 
 class PaymentService
 {
@@ -25,11 +23,10 @@ class PaymentService
     }
 
     public function store(array $data) : PaymentResource {
+        $data['uuid'] = Uuid::uuid4();
         $gatewayRepository = app(PaymentGatewayRepositoryInterface::class);
-
-        $payment = $gatewayRepository->createPayment($this->prepareDataPaymentMercadoPago($data));
-
-        return new PaymentResource($this->paymentRepository->store($this->prepareDataStore($payment, $data)));
+        $paymentGateway = $gatewayRepository->createPayment($this->prepareDataPaymentMercadoPago($data));
+        return new PaymentResource($this->paymentRepository->store($this->prepareDataStore($paymentGateway, $data)));
     }
 
     public function index(): PaymentCollection {
@@ -42,6 +39,12 @@ class PaymentService
 
     public function show(string $uuid) : PaymentResource {
         return new PaymentResource($this->paymentRepository->show($uuid));
+    }
+
+    public function webhook(array $data, string $uuid) : void {
+        Log::info(json_encode($data));
+        Log::info($uuid);
+        // return new PaymentResource($this->paymentRepository->webhook($uuid));
     }
 
     private function prepareDataPaymentMercadoPago(array $data) : array
@@ -82,6 +85,8 @@ class PaymentService
         }
 
         return array(
+            'notification_url'      => "https://payment.rafaelcoldebella.com.br/v1/payments/". $data['uuid'] . "/webhook",
+            'external_reference'    => $data['uuid'],
             'payment_method_id'     => $data['paymentMethodId'],
             'issuer_id'             => $data['issuerId'],
             'token'                 => $data['token'],
@@ -97,12 +102,33 @@ class PaymentService
         $paymentIntention = $paymentIntentionRepository->show($data['paymentIntentionUuid']);
 
         return array(
-            "uuid" => DB::raw('gen_random_uuid()'),
+            "uuid" =>  $data['uuid'],
             "email" => $data['email'],
             "payment_intention_id" => $paymentIntention->id,
             "gateway_payment_id" => $payment['id'],
             "payment_type" => $data['paymentMethodId'],
             "transection_amount" => $paymentIntention->total_amount,
+            "status" => array(
+                "status" => $payment['status'],
+                "detail" => $payment['status_detail'],
+            )
         );
     }
+
+    private function prepareDataStatus($payment): array
+    {
+        return array(
+            "status" => $payment['status'],
+            "detail" => $payment['status_detail'],
+        );
+    }
+
+    private function extractStatus($payment): array
+    {
+        return array(
+            "status" => $payment['id'],
+            "detail" => $payment['paymentMethodId'],
+        );
+    }
+
 }

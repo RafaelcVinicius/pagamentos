@@ -12,7 +12,7 @@
     <input id="firstCompany" type="button" onclick="payment()" value="Pague a compra"/>
     <div id="wallet_container"></div>
     <script>
-        const mp = new MercadoPago('TEST-f77977b8-7bb1-4d1f-8b88-89c7fedbe11a');
+        const mp = new MercadoPago('APP_USR-5c4239f9-0e8a-42ba-8eb1-920b1183d7f7');
         const bricksBuilder = mp.bricks();
 
         function payment(){

@@ -103,7 +103,7 @@ class PaymentIntentionService
         }
 
         return array(
-            'uuid'              => DB::raw('gen_random_uuid()'),
+            'uuid'              => $data['uuid'],
             'payer_id'          => $payer?->id ?? null,
             'origen'            => empty($payer) ? '2' : '1',
             'total_amount'      => $data['totalAmount'],

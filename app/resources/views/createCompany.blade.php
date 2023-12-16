@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://www.mercadopago.com/v2/security.js" view="item"></script>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
 </head>
 <body>
@@ -11,7 +12,7 @@
     <input id="firstCompany" type="button" onclick="payment()" value="Pague a compra"/>
     <div id="wallet_container"></div>
     <script>
-        const mp = new MercadoPago('TEST-977ad40e-8a38-47ef-949c-2f915fc2640f');
+        const mp = new MercadoPago('TEST-f77977b8-7bb1-4d1f-8b88-89c7fedbe11a');
         const bricksBuilder = mp.bricks();
 
         function payment(){

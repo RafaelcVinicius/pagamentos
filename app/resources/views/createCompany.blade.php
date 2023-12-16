@@ -33,7 +33,6 @@
                     currency_id: "BRL",
                     unit_price: 1,
                 }]
-
             }
 
             fetch("/api/v1/intentions", {

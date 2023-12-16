@@ -14,7 +14,7 @@ class GatewayRepository implements GatewayRepositoryInterface
         if(array_key_exists('mercadoPago', $data))
         {
             $mercadoPagoRepository = app(MercadoPagoRepositoryInterface::class);
-            $auth = $mercadoPagoRepository->auth( $data["mercadoPago"]);
+            $mercadoPagoRepository->auth($this->prepareBodyAuth($data["mercadoPago"]));
         }
 
         return Auth::user()->company;
@@ -33,5 +33,15 @@ class GatewayRepository implements GatewayRepositoryInterface
 
     public function show(string $type) : Companies {
        return Auth::user()->company->mercadoPago->firstOrFail();
+    }
+
+    private function prepareBodyAuth(array $data){
+        return array(
+            "client_secret" =>  config("constants.CLIENT_SECRET_MP"),
+            "client_id" =>      config("constants.CLIENT_ID_MP"),
+            "grant_type" =>     "authorization_code",
+            "code" =>           $data["code"],
+            "redirect_uri" =>   config("constants.APP_URL_ADM")."/success",
+        );
     }
 }

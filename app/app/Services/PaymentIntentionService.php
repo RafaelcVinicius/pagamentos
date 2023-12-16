@@ -24,11 +24,11 @@ class PaymentIntentionService
 
     public function store(array $data) : PaymentIntentionResource
     {
-        $data['uuid'] = Uuid::uuid4();
-        $gateway = app(PaymentGatewayRepositoryInterface::class);
-        $preferences = $gateway->createPreferences($this->prepareDataPreferences($data));
+        // $data['uuid'] = Uuid::uuid4();
+        // $gateway = app(PaymentGatewayRepositoryInterface::class);
+        // $preferences = $gateway->createPreferences($this->prepareDataPreferences($data));
 
-        return new PaymentIntentionResource($this->paymentIntentionRepository->store($this->prepareDataStore($preferences, $data)));
+        return new PaymentIntentionResource($this->paymentIntentionRepository->store($this->prepareDataStore($data)));
     }
 
     public function index(): PaymentIntentionCollection
@@ -78,7 +78,7 @@ class PaymentIntentionService
         // return new PaymentIntentionResource($this->paymentIntentionRepository->show($uuid));
     }
 
-    private function prepareDataStore(array $preferences, array $data) : array
+    private function prepareDataStore(array $data) : array
     {
         $payer = null;
         if(array_key_exists('payerUuid', $data) && !empty($data['payerUuid']))
@@ -103,14 +103,14 @@ class PaymentIntentionService
         }
 
         return array(
-            'uuid'              => $data['uuid'],
+            'uuid'              => DB::raw('gen_random_uuid()'),
             'payer_id'          => $payer?->id ?? null,
             'origen'            => empty($payer) ? '2' : '1',
             'total_amount'      => $data['totalAmount'],
-            'preferences_id'    => $preferences['id'],
             'webhook'           => $data['webHook'],
-            'url_callback'      => $data['urlCallback'],
+            'callback_url'      => $data['callbackUrl'],
             'gateway'           => $data['gateway'],
+            'additional_info'   => array_key_exists("additionalInfo", $data) ? json_encode($data['additionalInfo']) : null,
         );
     }
 

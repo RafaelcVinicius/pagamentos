@@ -12,5 +12,5 @@ class GatewayMercadoPago extends Model
     public $timestamps = true;
     protected $primaryKey = 'id';
     protected $table = 'gateway_mercado_pago';
-    protected $fillable = ['user_id', 'access_token', 'public_key', 'refresh_token', 'expires_in_at'];
+    protected $fillable = ['gateway_user_id', 'access_token', 'public_key', 'refresh_token', 'scope', 'live_mode', 'expires_in_at'];
 }

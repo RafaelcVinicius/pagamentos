@@ -26,8 +26,13 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
             $date = new Carbon();
             if($this->mercadoPago->expires_in_at <= $date)
             {
-                $data['grantType'] = "refresh_token";
-                $data['refreshToken'] = $this->mercadoPago->refresh_token;
+                $data = [
+                    "client_secret" =>  config("constants.CLIENT_SECRET_MP"),
+                    "client_id" =>      config("constants.CLIENT_ID_MP"),
+                    "grant_type" =>     "refresh_token",
+                    "refresh_token" =>  $this->mercadoPago->refresh_token,
+                ];
+
                 $this->auth($data);
 
                 $this->mercadoPago = Auth::user()->company->mercadoPago;
@@ -42,14 +47,7 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
         $req = new CustomRequest();
         $req->setRoute(config("constants.API_MP_URL")."/oauth/token");
         $req->setHeaders(["Content-Type" => "application/json"]);
-        $req->setBody([
-            "redirect_uri" =>   env("APP_URL"),
-            "client_secret" =>  config("constants.CLIENT_SECRET_MP"),
-            "client_id" =>      config("constants.CLIENT_ID_MP"),
-            "grant_type" =>     $data["grantType"],
-            "code" =>           $data["code"],
-            "refresh_token" =>  $data["refreshToken"],
-        ]);
+        $req->setBody($data);
 
         if($req->post() && in_array($req->response->getCode(), [201, 200]))
         {
@@ -193,11 +191,13 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
     private function prepareDataAuth(array $data){
         $date = new Carbon();
         return array(
-            "user_id" =>        $data["user_id"],
-            "access_token" =>   $data["access_token"],
-            "public_key" =>     $data["public_key"],
-            "refresh_token" =>  $data["refresh_token"],
-            "expires_in_at" =>  $date->addSeconds($data["expires_in"]),
+            "gateway_user_id" => $data["user_id"],
+            "access_token" =>    $data["access_token"],
+            "public_key" =>      $data["public_key"],
+            "refresh_token" =>   $data["refresh_token"],
+            "scope" =>           $data["scope"],
+            "live_mode" =>       $data["live_mode"],
+            "expires_in_at" =>   $date->addSeconds($data["expires_in"]),
         );
     }
 

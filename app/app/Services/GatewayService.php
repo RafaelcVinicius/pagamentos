@@ -40,7 +40,6 @@ class GatewayService
         return array(
             "mercadoPago" => array(
                 "code"          => $data['mercadoPago']['code'],
-                "grantType"          => "authorization_code",
             ),
         );
     }

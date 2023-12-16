@@ -22,13 +22,22 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "payerUuid"     => ['uuid'],
-            "origin"        => ['string', 'max:1'],
-            "totalAmount"   => ['required', 'numeric'],
-            "gateway"       => ['required', 'string', 'min:1', 'max:2'],
-            "urlCallback"   => ['required', 'string', 'min:10', 'max:100'],
-            "webHook"       => ['required', 'string', 'min:10', 'max:100'],
-            "items"         => ['array'],
+            "payerUuid"                             => ['uuid'],
+            "origin"                                => ['string', 'max:1'],
+            "totalAmount"                           => ['required', 'numeric'],
+            "gateway"                               => ['required', 'string', 'min:1', 'max:2'],
+            "callbackUrl"                           => ['required', 'string', 'min:10', 'max:100'],
+            "webHook"                               => ['required', 'string', 'min:10', 'max:100'],
+            "additionalInfo.items"                  => ['array'],
+            "additionalInfo.items.*.id"             => ['required_with:additionalInfo.items', 'string'],
+            "additionalInfo.items.*.title"          => ['required_with:additionalInfo.items', 'string'],
+            "additionalInfo.items.*.description"    => ['string'],
+            "additionalInfo.items.*.picture_url"    => ['string'],
+            "additionalInfo.items.*.category_id"    => ['string'],
+            "additionalInfo.items.*.quantity"       => ['required_with:additionalInfo.items', 'numeric'],
+            "additionalInfo.items.*.unit_price"     => ['required_with:additionalInfo.items', 'numeric'],
+            "additionalInfo.items.*.type"           => ['string'],
+            "additionalInfo.items.*.warranty"       => ['boolean'],
         ];
     }
 }

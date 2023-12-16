@@ -26,6 +26,7 @@ class KeycloakAuthentication
 
         try {
             if(!$token){
+
                 if(str_contains($request->route()->uri, 'api/v1/intentions') && $request->route('intentionUuid'))
                 {
                     $paymentsIntention = PaymentsIntention::where('uuid', $request->route('intentionUuid'))->firstOrFail();
@@ -36,13 +37,14 @@ class KeycloakAuthentication
                     $payments = Payments::where('uuid', $request->route('paymentUuid'))->firstOrFail();
                     $user =  $payments->paymentIntention->company->user;
                 }
-                else if(!(str_contains($request->route()->uri, 'api/v1/payments')))
+                else if(str_contains($request->route()->uri, 'api/v1/payments') && $request->method() == "POST")
                 {
-                    return response()->json(['message' => 'Token de acesso ausente!'], 401);
+                    $paymentsIntention = PaymentsIntention::where('uuid', $request->get('paymentIntentionUuid'))->firstOrFail();
+                    $user =  $paymentsIntention->company->user;
                 }
                 else
                 {
-                    $user = null;
+                    return response()->json(['message' => 'Token de acesso ausente!'], 401);
                 }
             }
             else

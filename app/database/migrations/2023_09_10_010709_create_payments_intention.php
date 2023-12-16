@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('gateway', 2);
             $table->decimal('total_amount')->comment('Valor original da venda');
             $table->char('origin', 1)->default(1)->comment('1 = sites externo, 2 = site interno');
-            $table->string('preferences_id')->nullable();
-            $table->string('url_callback')->nullable();
+            $table->string('callback_url');
+            $table->json('additional_info')->nullable();
             $table->string('webhook')->nullable();
             $table->timestamps();
 

@@ -18,17 +18,18 @@ class PaymentIntentionResource extends JsonResource
             "uuid" => $this->uuid,
             "totalAmount"       => $this->total_amount,
             "webhook"           => $this->webhook,
+            "callbackUrl"       => $this->callback_url,
             "gateway"           => $this->gateway,
             "origin"            => $this->origin,
-            "preferencesId"     => $this->preferences_id,
             "company"           => $this->when($this->company, function() {
                 return new CompanyResource($this->company);
             }),
-            "payer"            => $this->when($this->payer, function() {
-                return new PayerResource($this->company);
+            "payer"             => $this->when($this->payer, function() {
+                return new PayerResource($this->payer);
             }),
-            "dateCreate"    => $this->created_at,
-            "dateUpdate"    => $this->updated_at,
+            "additionalInfo"    => json_decode($this->additional_info),
+            "dateCreate"        => $this->created_at,
+            "dateUpdate"        => $this->updated_at,
         ];
     }
 }

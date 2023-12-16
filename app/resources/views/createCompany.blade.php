@@ -12,14 +12,14 @@
     <input id="firstCompany" type="button" onclick="payment()" value="Pague a compra"/>
     <div id="wallet_container"></div>
     <script>
-        const mp = new MercadoPago('APP_USR-5c4239f9-0e8a-42ba-8eb1-920b1183d7f7');
+        const mp = new MercadoPago('APP_USR-8e558cad-4b8b-467a-83c2-0f3ea8b049f7');
         const bricksBuilder = mp.bricks();
 
         function payment(){
             const obj =
             {
-                payerUuid: "fafff861-a91c-49a7-b8b8-e4a88eb54333",
-                totalAmount: 1500,
+                payerUuid: "9167a6d6-25af-4934-996d-0e0598a68994",
+                totalAmount: 1,
                 gateway: "MP",
                 urlCallback: "https://rafaelcoldebella.com.br",
                 webHook: "https://rafaelcoldebella.com.br/webHook",
@@ -31,7 +31,7 @@
                     category_id: "Celular",
                     quantity: 1,
                     currency_id: "BRL",
-                    unit_price: 1500,
+                    unit_price: 1,
                 }]
 
             }
@@ -40,7 +40,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJIUzNDSzBFbTBINi1pZFBYTE9xWXFBeS1ndG00RTN1c0oweWh3YlRNdmtrIn0.eyJleHAiOjE3MDI3MTg2OTksImlhdCI6MTcwMjY4MjY5OSwianRpIjoiZjA3YWU1MTEtNmUzNC00ZTRiLThlZDgtOTEyOTNlNTg1MWFmIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnJhZmFlbGNvbGRlYmVsbGEuY29tLmJyL3JlYWxtcy9wYXltZW50cyIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI1NDRlNTBjNy0wNTNiLTQ4MTctODljNC1jZDRiN2M5M2QxN2MiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJwYXltZW50c0NsaWVudCIsInNlc3Npb25fc3RhdGUiOiJlMzUwNjUzZC1lNjgyLTQwYTgtYjY1Mi0wMGJlMDNjMjdhNTgiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLXBheW1lbnRzIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsInNpZCI6ImUzNTA2NTNkLWU2ODItNDBhOC1iNjUyLTAwYmUwM2MyN2E1OCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IlJhZmFlbCIsInByZWZlcnJlZF91c2VybmFtZSI6InJhZmFlbCIsImdpdmVuX25hbWUiOiJSYWZhZWwiLCJmYW1pbHlfbmFtZSI6IiIsImVtYWlsIjoicmFmYWVsLmNvbGRlYmVsbGFhQGdtYWlsLmNvbSJ9.PoxLKJuxGt-tx7KIMg7tgYiAg4KdwwFc4jcqg0-LDQniSR_cItCvT0GQNMwtOdxLbwgYDAXdOzjwX-Sn5wa1AttdNQHX7VnuHKJvTxvjsZ3fOqyYUtZwg9S3iht-KKPqfilApKdDcdfOgfkYxo2DnOuQBRHSDZBdLLxr7YnaZRo0TkBG5BZnA8lHujOW9LqtsnXutx9kAM8SU3Nmsm5XCMHFi8cvm5sYS-mWjYusLQ5n4IJawx3xWuYZofavmbMBN-OOqPTHgkPKeq2dZXI34Sm6_aZEpHw0dIcCTxupwZbN2RHUor7siDhAWkkcZLEaDdCmJupRcGSOWqmPyiuYyA'
+                    'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJIUzNDSzBFbTBINi1pZFBYTE9xWXFBeS1ndG00RTN1c0oweWh3YlRNdmtrIn0.eyJleHAiOjE3MDI3ODQ4NDYsImlhdCI6MTcwMjc0ODg0NiwianRpIjoiZDdmMTk5NzMtMDdhMS00Y2E1LWE2NWUtZmE1ZTgzMjJmZjg2IiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnJhZmFlbGNvbGRlYmVsbGEuY29tLmJyL3JlYWxtcy9wYXltZW50cyIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI1NDRlNTBjNy0wNTNiLTQ4MTctODljNC1jZDRiN2M5M2QxN2MiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJwYXltZW50c0NsaWVudCIsInNlc3Npb25fc3RhdGUiOiJmYzY5N2ZkNS00MDYwLTQxMmMtYjNjYi03ZTNiMGVjMGZiNzIiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbIi8qIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLXBheW1lbnRzIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsInNpZCI6ImZjNjk3ZmQ1LTQwNjAtNDEyYy1iM2NiLTdlM2IwZWMwZmI3MiIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IlJhZmFlbCIsInByZWZlcnJlZF91c2VybmFtZSI6InJhZmFlbCIsImdpdmVuX25hbWUiOiJSYWZhZWwiLCJmYW1pbHlfbmFtZSI6IiIsImVtYWlsIjoicmFmYWVsLmNvbGRlYmVsbGFhQGdtYWlsLmNvbSJ9.vRSi_b8VMh0lBQteIzOWSSS1kGJR9djD3bTqKQiVM4CBi5Vrj0inO0hijf7weftTtvGAqOnufVj5vrxmIqF1mTS8E5B7g-0eT4mHPV6FccprGMXLjUmr7kgXW11GjDZ9z_rQw8zH79gHYAWgxUKXQtPEFCdA_IewwQe_UdD-z3-LpzNucRYP6NT-lbQ1rwns3lb4gqC34HIA65FVxczDGynATWGPAmHnLqAZAmv5gimhEMY4ndWkSQe-SntpCbxlk6FUk4apQjJTk2VjqBuq3Qgvs5Kea6puZzqXS08VPOi05ZxMTOSaLwT8q-SzrnZ_TA5TJDRNCEfoAwpS2wg4aQ'
                 },
                 body: JSON.stringify(obj),
             })

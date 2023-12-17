@@ -117,9 +117,10 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
         $req = new CustomRequest();
         $req->setRoute(config("constants.API_MP_URL")."/v1/payments");
         $req->setHeaders([
-            "Content-Type" => "application/json",
-            "Authorization" =>  "Bearer " . $this->mercadoPago->access_token,
+            "Content-Type" =>       "application/json",
+            "Authorization" =>      "Bearer " . $this->mercadoPago->access_token,
             "X-Idempotency-Key" =>  $data['external_reference'],
+            "x-integrator-id" =>    config('constants.X_INTEGRATOR_ID'),
         ])
         ->setBody(json_encode($data));
 

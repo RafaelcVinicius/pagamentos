@@ -7,5 +7,5 @@ return [
     "APP_URL" => env("APP_URL", "https://payment.rafaelcoldebella.com.br"),
     "APP_URL_ADM" => env("APP_URL", "https://paypayments.rafaelcoldebella.com.br"),
     "APP_URL_FRONT" => env("APP_URL_FRONT", "https://checkout.rafaelcoldebella.com.br"),
-    "X_INTEGRATOR_ID" => env("X_INTEGRATOR_ID", "dev_24c65fb163bf11ea96500242ac130004"),
+    "X_INTEGRATOR_ID" => env("X_INTEGRATOR_ID", "dev_9ca43ceb83ff11eeb221eee5f4a83d0f"),
 ];

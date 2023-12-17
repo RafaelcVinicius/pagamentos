@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class KeycloakAuthentication
 {
@@ -22,7 +21,7 @@ class KeycloakAuthentication
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->bearerToken(); // Assumindo que o token está no cabeçalho de autorização
+        $token = $request->bearerToken();
 
         try {
             if(!$token){
@@ -70,8 +69,7 @@ class KeycloakAuthentication
                 }
             }
 
-            if($user)
-                Auth::attempt(['email' => $user->email, 'password' =>  $user->uuid]);
+            Auth::attempt(['email' => $user->email, 'password' =>  $user->uuid]);
 
             return $next($request);
         } catch (\Exception) {

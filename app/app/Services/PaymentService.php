@@ -10,6 +10,7 @@ use App\Repositories\Contracts\PayerRepositoryInterface;
 use App\Repositories\Contracts\PaymentIntentionRepositoryInterface;
 use App\Repositories\Contracts\PaymentRepositoryInterface;
 use App\Repositories\PaymentRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
@@ -57,14 +58,7 @@ class PaymentService
             $payerRepository = app(PayerRepositoryInterface::class);
             $payer = $payerRepository->showById($paymentIntention->payer_id);
 
-            if(!$payer->mercadoPago){
-                $gatewayRepository = app(PaymentGatewayRepositoryInterface::class);
-                $payerGateway = $gatewayRepository->createPayer(new PayerResource($payer));
-
-                $payer = $payerRepository->showById($paymentIntention->payer_id);
-            }
-
-            $payer =  [
+            $payerArray =  [
                 'type'              => "customer",
                 'id'                => $payer->mercadoPago->gateway_customer_id,
                 'email'             => $payer->email,
@@ -78,13 +72,14 @@ class PaymentService
         }
         else
         {
-            $payer =  [
+            $payerArray =  [
                 'type'      => "guest",
                 'email'     => $data['email'],
             ];
         }
 
-        return array(
+
+        $paymentData = array(
             'notification_url'      => config("constants.APP_URL"). "/api/v1/payments/". $data['uuid'] . "/webhook",
             'external_reference'    => $data['uuid'],
             'payment_method_id'     => $data['paymentMethodId'],
@@ -92,8 +87,36 @@ class PaymentService
             'token'                 => $data['token'],
             'installments'          => $data['installments'],
             'transaction_amount'    => (float)$paymentIntention->total_amount,
-            'payer'                 => $payer
+            'payer'                 => $payerArray,
+            'statement_descriptor'  => $paymentIntention->company->business_name,
+            'application_fee'       => Round((float)$paymentIntention->total_amount*0.009, 2, PHP_ROUND_HALF_EVEN),
         );
+
+        if($paymentIntention->additional_info)
+            $paymentData['additional_info']['items'] = json_decode($paymentIntention->additional_info)->items;
+
+        if($payer){
+            $paymentData['additional_info']['payer'] = array(
+                "first_name" => $payer->first_name,
+                "last_name" => $payer->last_name,
+                "phone" => array(
+                    "area_code" => substr($payer->phone, 0, 2),
+                    "number" => substr($payer->phone, 2, strlen($payer->phone)-2)
+                ),
+                "address" => array(
+                    "zip_code" => $payer->address->zip_code,
+                    "street_name" => $payer->address->street_name,
+                    "street_number" => $payer->address->street_number,
+                )
+            );
+        }
+
+        if(array_key_exists('additional_info', $paymentData) && array_key_exists('items', $paymentData['additional_info']))
+            $paymentData['description'] = $paymentData['additional_info']['items'][0]->title;
+        else
+            $paymentData['description'] = $paymentIntention->company->business_name;
+
+        return  $paymentData;
     }
 
     private function prepareDataStore($payment, $data): array

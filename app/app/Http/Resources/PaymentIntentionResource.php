@@ -15,7 +15,8 @@ class PaymentIntentionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "uuid" => $this->uuid,
+            "uuid"              => $this->uuid,
+            "checkoutUrl"       => config('constants.APP_URL_FRONT') . "/v1?uuid=" . $this->uuid,
             "totalAmount"       => $this->total_amount,
             "webhook"           => $this->webhook,
             "callbackUrl"       => $this->callback_url,

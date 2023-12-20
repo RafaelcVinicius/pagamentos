@@ -50,26 +50,16 @@ class KeycloakAuthentication
             {
                 $publicKey = <<<EOD
                     -----BEGIN PUBLIC KEY-----
-                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxEuUpZlWvTU4xYY19y/SmpMMnPBmyE9KnvEtOiZN/UWM5krqh9CuIAvUplw1i8im7HRPW1Xz+YJRYAz72JVqxzNLxB0VAVjtlJFZ/M4R81MbKtMuk1U1WLC2wAiwyBsP+uI2HLERef0VdFCexrgGPi6jEvJjoAntZQzoL0Sfbp72u6IsGo9mFm8GWz1nwM1LvP/PJR8/w62lno9GEBeFCwAZQMS/A739UnxT7IpoI/JBXlYB79x/5sPG9jYQV8S4N1MwqA6tC2/lVaZyta5GheXPcTrc2rQ+shjYrPF9S7UQLZZWBE9ltgKFUJ8MI+Uf9CstBVP7kWG0t/SQbNutmQIDAQAB
+                    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvwvpqGmphmPooNnfCU3QyfkdCM4+UwNxC+hVUxiBYkFBP4szJ3DtDM3twqc+4inUIlh+h96tyhL+C2KaWXj5xvGO9tUxgPjtRmvqUKDckdULMdb5Y9Ke86OQPlj4jqpMp1Ifs5M6rYbWreSXuGud24ey5Jc/w9K2t5nHMwAf5FLSh6Wpu62fQK3xQnaQnosFpmzo9G5X46/qfxUZliPKmnyrDtBbEeFnOnzlI2JRdG98XH9oNyFzYXrUYsaRRwpOVNwSeNxSpqxFzXwLuZUIN1tqDU/WWgtS7ML5ZxvUq0I2bLxf6iUHttagmdhdnnw7/05PYcDhnVpVGuCacQ/i8wIDAQAB
                     -----END PUBLIC KEY-----
                     EOD;
 
                 $decodedToken = JWT::decode($token, new Key($publicKey, 'RS256'));
 
-                $user = User::where('uuid', $decodedToken->sub)->first();
-
-                if(!$user){
-                    $user = new User();
-                    $user->uuid     = $decodedToken->sub;
-                    $user->email    = $decodedToken->email;
-                    $user->name     = $decodedToken->name;
-                    $user->password = $decodedToken->sub;
-                    $user->save();
-                    $user->refresh();
-                }
+                $user = User::where('uuid', $decodedToken->sub)->firstOrFail();
             }
 
-            Auth::attempt(['email' => $user->email, 'password' =>  $user->uuid]);
+            Auth::loginUsingId($user->id);
 
             return $next($request);
         } catch (\Exception) {

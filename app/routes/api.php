@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\GatewayController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\pagamentosController;
 use App\Http\Controllers\PayerController;
 use App\Http\Controllers\PaymentController;
@@ -20,6 +21,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function (){
+
+    Route::prefix('auth')->group(function (){
+        Route::get('/', [LoginController::class, 'show'])->middleware('keycloak');;
+        Route::post('/register', [LoginController::class, 'register']);
+        Route::post('/token', [LoginController::class, 'token']);
+        Route::post('/logout', [LoginController::class, 'logout']);
+    });
+
+
     Route::middleware(['keycloak'])->group(function () {
         Route::prefix('companies')->group(function (){
             Route::get('/', [CompanyController::class, 'index']);

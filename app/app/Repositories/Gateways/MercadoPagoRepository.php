@@ -58,7 +58,7 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
         else
         {
             Log::info(json_encode($req->response->asString));
-            throw new Exception("Error get Token auth");
+            throw new Exception("Error get Token auth", 401);
         }
     }
 

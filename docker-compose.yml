@@ -22,6 +22,8 @@ services:
       context: ./php
       dockerfile: dockerfile
     restart: unless-stopped
+    extra_hosts:
+      - auth.rafaelcoldebella.com.br:host-gateway
     volumes:
       - ./app:/var/www/html
     working_dir: /var/www/html

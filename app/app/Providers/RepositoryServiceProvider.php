@@ -6,11 +6,13 @@ use App\Repositories\CompanyRepository;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
 use App\Repositories\Contracts\GatewayRepositoryInterface;
 use App\Repositories\Contracts\Gateways\PaymentGatewayRepositoryInterface;
+use App\Repositories\Contracts\LoginRepositoryInterface;
 use App\Repositories\Contracts\PayerRepositoryInterface;
 use App\Repositories\Contracts\PaymentIntentionRepositoryInterface;
 use App\Repositories\Contracts\PaymentRepositoryInterface;
 use App\Repositories\Gateways\MercadoPagoRepository;
 use App\Repositories\GatewayRepository;
+use App\Repositories\LoginRepository;
 use App\Repositories\PayerRepository;
 use App\Repositories\PaymentIntentionRepository;
 use App\Repositories\PaymentRepository;
@@ -63,6 +65,11 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             PaymentGatewayRepositoryInterface::class,
             MercadoPagoRepository::class
+        );
+
+        $this->app->bind(
+            LoginRepositoryInterface::class,
+            LoginRepository::class
         );
     }
 }

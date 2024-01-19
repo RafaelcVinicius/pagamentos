@@ -78,19 +78,22 @@ class PaymentService
             ];
         }
 
-
         $paymentData = array(
             'notification_url'      => config("constants.APP_URL"). "/api/v1/payments/". $data['uuid'] . "/webhook",
             'external_reference'    => $data['uuid'],
             'payment_method_id'     => $data['paymentMethodId'],
-            'issuer_id'             => $data['issuerId'],
-            'token'                 => $data['token'],
             'installments'          => $data['installments'],
             'transaction_amount'    => (float)$paymentIntention->total_amount,
             'payer'                 => $payerArray,
             'statement_descriptor'  => $paymentIntention->company->business_name,
-            'application_fee'       => Round((float)$paymentIntention->total_amount*0.009, 2, PHP_ROUND_HALF_EVEN),
+            'application_fee'       => Round((float)$paymentIntention->total_amount*0.005, 2, PHP_ROUND_HALF_EVEN),
         );
+
+        if(array_key_exists("issuerId", $data))
+            $paymentData['issuer_id'] = $data['issuerId'];
+
+        if(array_key_exists("token", $data))
+            $paymentData['token'] = $data['token'];
 
         if($paymentIntention->additional_info)
             $paymentData['additional_info']['items'] = json_decode($paymentIntention->additional_info)->items;

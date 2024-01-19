@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('refunds', function (Blueprint $table) {
+        Schema::create('payment_detail_cards', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('payment_id')->comment('id da venda payments');
-            $table->decimal('amount');
+            $table->bigInteger('payment_id');
+            $table->string('payment_method', 20);
+            $table->char('first_digits', 4);
             $table->timestamps();
 
             $table->foreign('payment_id')->references('id')->on('payments');
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('refunds');
+        Schema::dropIfExists('payments');
     }
 };

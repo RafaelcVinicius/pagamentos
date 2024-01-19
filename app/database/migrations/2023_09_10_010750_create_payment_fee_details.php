@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('refunds', function (Blueprint $table) {
+        Schema::create('payment_fee_details', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('payment_id')->comment('id da venda payments');
-            $table->decimal('amount');
+            $table->bigInteger('payment_id');
+            $table->string('type', 30);
+            $table->bigInteger('original_amount');
+            $table->bigInteger('refunded_amount');
             $table->timestamps();
 
             $table->foreign('payment_id')->references('id')->on('payments');
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('refunds');
+        Schema::dropIfExists('payments');
     }
 };

@@ -24,8 +24,8 @@ class StoreRequest extends FormRequest
         return [
             "paymentIntentionUuid"      => ['required', 'uuid'],
             "paymentMethodId"           => ['required', 'string', 'min:1'],
-            "issuerId"                  => ['required', 'int', 'min:1'],
-            "token"                     => ['required', 'string', 'min:10', 'max:100'],
+            "issuerId"                  => ['int', 'min:1'],
+            "token"                     => ['string', 'min:10', 'max:100'],
             "installments"              => ['required', 'int', 'min:1'],
             "email"                     => ['email'],
         ];

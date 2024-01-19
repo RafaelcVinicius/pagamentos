@@ -18,7 +18,7 @@ class LoginRepository implements LoginRepositoryInterface
             'Authorization' => "Bearer " . $this->bearerToken(),
             'Content-Type' => "application/json",
         ])->post(config("constants.APP_AUTH") . "/admin/realms/" . config('constants.REALME') . "/users", $data);
-
+dd( $response);
         if(!$response->created()){
             $message = !empty($response->body()) ? array_values(json_decode($response->body(), true))[0] : "";
             throw new Exception($message, $response->status());
@@ -69,11 +69,12 @@ class LoginRepository implements LoginRepositoryInterface
     }
 
     private function createUserDB(array $data) : bool {
+        dd( $data);
         $user = new User();
         $user->uuid =       DB::raw('gen_random_uuid()');
         $user->name =       $data['username'];
         $user->email =      $data['email'];
-        $user->password =   $user['credentials'][0]['value'];
+        $user->password =   $data['credentials'][0]['value'];
 
         return $user->save();
     }

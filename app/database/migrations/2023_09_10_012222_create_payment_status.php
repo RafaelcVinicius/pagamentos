@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments_status', function (Blueprint $table) {
+        Schema::create('payment_status', function (Blueprint $table) {
             $table->id();
             $table->bigInteger("payment_id")->comment('id da venda payments');
             $table->string('status');
@@ -30,6 +30,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('payments_status');
-
     }
 };

@@ -12,4 +12,6 @@ class Refunds extends Model
     public $timestamps = true;
     protected $primaryKey = 'id';
     protected $table = 'refunds';
+
+    protected $fillable = ['payment_id', 'amount'];
 }

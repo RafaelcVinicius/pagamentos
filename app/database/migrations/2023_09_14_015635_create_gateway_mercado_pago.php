@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('access_token');
             $table->string('scope');
             $table->boolean('live_mode');
-            $table->dateTime('expires_in_at');
+            $table->dateTime('expires_on');
             $table->timestamps();
             $table->softDeletes();
 

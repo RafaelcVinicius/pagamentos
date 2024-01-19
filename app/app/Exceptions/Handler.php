@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'type' => get_class($e),
                 'message' => $e->getMessage(),
-            ], $e->getCode());
+            ], 500);
         });
 
         $this->renderable(function(Throwable $e) {

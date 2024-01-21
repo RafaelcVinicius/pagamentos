@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\PaymentFeeDetails;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,11 +17,14 @@ class PaymentResource extends JsonResource
     {
         return [
             "uuid"                  => $this->uuid,
-            'payer'                 => new PayerResource($this->payer),
-            'origemAmount'          => $this->origem_amount,
             'transectionAmount'     => $this->transection_amount,
-            'webHook'               => $this->webhook,
+            'origemAmount'          => $this->origem_amount,
             'gateway'               => new GatewayResource($this->gateway),
+            'payer'                 => new PayerResource($this->payer),
+            'feeDetails'            => $this->when($this->paymentFeeDelails, new PaymentFeeDelailsCollection($this->paymentFeeDelails)),
+            'delailCards'           => $this->when($this->paymentDelailCards, new PaymentDelailCardsCollection($this->paymentDelailCards)),
+            'delailPix'             => $this->when($this->paymentDelailPix, new PaymentDelailPixResource($this->paymentDelailPix)),
+            'webHook'               => $this->webhook,
         ];
     }
 }

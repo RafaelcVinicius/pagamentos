@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger('payment_id');
             $table->string('type', 30);
             $table->bigInteger('original_amount');
-            $table->bigInteger('refunded_amount');
+            $table->bigInteger('refunded_amount')->default(0);
             $table->timestamps();
 
             $table->foreign('payment_id')->references('id')->on('payments');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('payment_fee_details');
     }
 };

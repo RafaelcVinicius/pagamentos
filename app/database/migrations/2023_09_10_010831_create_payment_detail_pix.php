@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('payment_detail_pix', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('payment_id');
-            $table->string('e2e_id', 26);
+            $table->string('e2e_id', 26)->nullable();
             $table->string('qr_code');
             $table->timestamp('expires_on');
             $table->timestamps();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('payment_detail_pix');
     }
 };

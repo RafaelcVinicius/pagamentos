@@ -17,15 +17,33 @@ class Payments extends Model
         'uuid', 'email', 'gateway_payment_id', 'payment_type', 'payment_intention_id', 'transection_amount'
     ];
 
-    public function payer(){
+    public function payer()
+    {
         return $this->hasOne(Payers::class, 'id', 'payers_id');
     }
 
-    public function status(){
+    public function status()
+    {
         return $this->hasOne(PaymentsStatus::class, 'payment_id', 'id');
     }
 
-    public function paymentIntention(){
+    public function paymentIntention()
+    {
         return $this->hasOne(PaymentsIntention::class, 'id', 'payment_intention_id');
+    }
+
+    public function paymentDetailPix()
+    {
+        return $this->hasOne(PaymentDetailPix::class, 'payment_id', 'id');
+    }
+
+    public function paymentDetailCards()
+    {
+        return $this->hasMany(PaymentDetailCards::class, 'payment_id', 'id');
+    }
+
+    public function paymentFeeDetails()
+    {
+        return $this->hasMany(PaymentFeeDetails::class, 'payment_id', 'id');
     }
 }

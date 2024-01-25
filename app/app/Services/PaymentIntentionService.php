@@ -22,7 +22,7 @@ class PaymentIntentionService
         $this->paymentIntentionRepository = $paymentIntentionRepository;
     }
 
-    public function store(array $data) : PaymentIntentionResource
+    public function store(array $data): PaymentIntentionResource
     {
         // $data['uuid'] = Uuid::uuid4();
         // $gateway = app(PaymentGatewayRepositoryInterface::class);
@@ -36,28 +36,28 @@ class PaymentIntentionService
         return new PaymentIntentionCollection($this->paymentIntentionRepository->index());
     }
 
-    public function update(array $data, string $uuid) : PaymentIntentionResource
+    public function update(array $data, string $uuid): PaymentIntentionResource
     {
         return new PaymentIntentionResource($this->paymentIntentionRepository->update($data, $uuid));
     }
 
-    public function show(string $uuid) : PaymentIntentionResource
+    public function show(string $uuid): PaymentIntentionResource
     {
         return new PaymentIntentionResource($this->paymentIntentionRepository->show($uuid));
     }
 
-    public function webhook(array $data, string $uuid) : void
+    public function webhook(array $data, string $uuid): void
     {
         Log::info("webhook");
         Log::info(json_encode($data));
         Log::info($uuid);
 
-        if(array_key_exists('data', $data) && !empty($data['data']['id'])){
-        Log::info($data['data']['id']);
+        if (array_key_exists('data', $data) && !empty($data['data']['id'])) {
+            Log::info($data['data']['id']);
 
             $gateway = app(PaymentGatewayRepositoryInterface::class);
 
-            switch($data["type"]) {
+            switch ($data["type"]) {
                 case "payment":
                     $payment = $gateway->showPayment($data['data']['id']);
                     break;
@@ -72,33 +72,30 @@ class PaymentIntentionService
                     break;
                 case "point_integration_wh":
                     // $_POST contém as informações relacionadas à notificação.
-                break;
+                    break;
             }
         }
         // return new PaymentIntentionResource($this->paymentIntentionRepository->show($uuid));
     }
 
-    private function prepareDataStore(array $data) : array
+    private function prepareDataStore(array $data): array
     {
         $payer = null;
-        if(array_key_exists('payerUuid', $data) && !empty($data['payerUuid']))
-        {
+        if (array_key_exists('payerUuid', $data) && !empty($data['payerUuid'])) {
             $payerRepository = app(PayerRepositoryInterface::class);
             $payer = $payerRepository->show($data['payerUuid']);
 
-            switch($data['gateway'])
-            {
+            switch ($data['gateway']) {
                 case "MP":
-                    if(empty($payer->mercadoPago))
-                    {
+                    if (empty($payer->mercadoPago)) {
                         $mercadoPagoRepository = app(PaymentGatewayRepositoryInterface::class);
                         $payerMP = $mercadoPagoRepository->showByEmailPayer($payer->email);
-                        if(empty($payerMP))
+                        if (empty($payerMP))
                             $payerMP = $mercadoPagoRepository->createPayer(new PayerResource($payer));
                         else
                             $payerMP = $mercadoPagoRepository->savePayerToDB($payer->uuid, $payerMP);
                     }
-                break;
+                    break;
             }
         }
 
@@ -114,39 +111,36 @@ class PaymentIntentionService
         );
     }
 
-    private function prepareDataPreferences(array $data) : array
+    private function prepareDataPreferences(array $data): array
     {
         $payer = null;
-        if(array_key_exists('payerUuid', $data) && !empty($data['payerUuid']))
-        {
+        if (array_key_exists('payerUuid', $data) && !empty($data['payerUuid'])) {
             $payerRepository = app(PayerRepositoryInterface::class);
             $payer = $payerRepository->show($data['payerUuid']);
 
-            switch($data['gateway'])
-            {
+            switch ($data['gateway']) {
                 case "MP":
-                    if(empty($payer->mercadoPago))
-                    {
+                    if (empty($payer->mercadoPago)) {
                         $mercadoPagoRepository = app(PaymentGatewayRepositoryInterface::class);
                         $payerMP = $mercadoPagoRepository->showByEmailPayer($payer->email);
-                        if(empty($payerMP))
+                        if (empty($payerMP))
                             $payerMP = $mercadoPagoRepository->createPayer(new PayerResource($payer));
                         else
                             $payerMP = $mercadoPagoRepository->savePayerToDB($payer->uuid, $payerMP);
                     }
-                break;
+                    break;
             }
         }
 
         return array(
             "additional_info" => "Produto tese",
             "back_urls" => array(
-                "success" => config("constants.APP_URL")."/success",
-                "pending" => config("constants.APP_URL")."/pending",
-                "failure" => config("constants.APP_URL")."/failure",
+                "success" => config("constants.APP_URL") . "/success",
+                "pending" => config("constants.APP_URL") . "/pending",
+                "failure" => config("constants.APP_URL") . "/failure",
             ),
             "external_reference" => "vinicius.colde@gmail.com",
-            "notification_url" => config("constants.APP_URL")."/api/v1/intentions/" . $data['uuid'] . "/webhook",
+            "notification_url" => config("constants.APP_URL") . "/api/v1/intentions/" . $data['uuid'] . "/webhook",
             "payment_methods"  => array(
                 "excluded_payment_methods" => [[
                     "id" => 'visa'
@@ -163,7 +157,7 @@ class PaymentIntentionService
                 "email" => $payer->email,
                 "phone" => array(
                     "area_code" => substr($payer->phone, 0, 2),
-                    "number" => substr($payer->phone, 2, strlen($payer->phone)-2)
+                    "number" => substr($payer->phone, 2, strlen($payer->phone) - 2)
                 ),
                 "identification" => array(
                     "type" => strlen($payer->cnpjcpf) > 11 ? "CNPJ" : "CPF",

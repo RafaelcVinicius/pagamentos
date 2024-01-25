@@ -15,24 +15,28 @@ class PaymentController extends Controller
         $this->paymentService = $paymentService;
     }
 
-    public function store(StoreRequest $request) {
+    public function store(StoreRequest $request)
+    {
         return  $this->paymentService->store($request->validated());
     }
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         return $this->paymentService->index();
     }
 
-    public function update(StoreRequest $request, string $uuid) {
+    public function update(StoreRequest $request, string $uuid)
+    {
         return $this->paymentService->update($request->validated(), $uuid);
-
     }
 
-    public function show(Request $request, string $uuid) {
-        return $this->paymentService->show($request, $uuid);
+    public function show(string $uuid)
+    {
+        return $this->paymentService->show($uuid);
     }
 
-    public function webhook(Request $request, string $uuid) {
+    public function webhook(Request $request, string $uuid)
+    {
         return $this->paymentService->webhook($request->all(), $uuid);
     }
 }

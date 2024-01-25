@@ -13,17 +13,20 @@ class PaymentsIntention extends Model
     protected $primaryKey = 'id';
     protected $table = 'payments_intention';
 
-    protected $fillable = ['uuid', 'company_id', 'payer_id', 'gateway', 'total_amount', 'webhook', 'callback_url', 'additional_info' ];
+    protected $fillable = ['uuid', 'company_id', 'payer_id', 'gateway', 'total_amount', 'webhook', 'callback_url', 'additional_info'];
 
-    public function company(){
+    public function company()
+    {
         return $this->hasOne(Companies::class, 'id', 'company_id');
     }
 
-    public function payer(){
+    public function payer()
+    {
         return $this->hasOne(Payers::class, 'id', 'payer_id');
     }
 
-    public function payment(){
-        return $this->hasOne(Payments::class, 'id', 'payment_id');
+    public function payment()
+    {
+        return $this->hasOne(Payments::class, 'payment_intention_id', 'id');
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\PaymentFeeDetails;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Nette\Utils\Floats;
 
 class PaymentResource extends JsonResource
 {
@@ -17,13 +17,14 @@ class PaymentResource extends JsonResource
     {
         return [
             "uuid"                  => $this->uuid,
-            'transectionAmount'     => $this->transection_amount,
-            'origemAmount'          => $this->origem_amount,
-            'gateway'               => new GatewayResource($this->gateway),
-            'payer'                 => new PayerResource($this->payer),
-            'feeDetails'            => $this->when($this->paymentFeeDelails, new PaymentFeeDelailsCollection($this->paymentFeeDelails)),
-            'delailCards'           => $this->when($this->paymentDelailCards, new PaymentDelailCardsCollection($this->paymentDelailCards)),
-            'delailPix'             => $this->when($this->paymentDelailPix, new PaymentDelailPixResource($this->paymentDelailPix)),
+            'transectionAmount'     => (float)$this->transection_amount,
+            'origemAmount'          => (float)$this->paymentIntention->total_amount,
+            'gateway'               => $this->paymentIntention->gateway,
+            'email'                 => $this->email,
+            'payer'                 => $this->when($this->paymentIntention->payer, new PayerResource($this->paymentIntention->payer)),
+            'feeDetails'            => $this->when($this->feeDelails, new PaymentFeeDetailsCollection($this->feeDetails)),
+            'detailCards'           => $this->when($this->payment_type == 'card', new PaymentDetailCardsCollection($this->detailCards)),
+            'detailPix'             => $this->when($this->payment_type == 'pix', new PaymentDetailPixResource($this->detailPix)),
             'webHook'               => $this->webhook,
         ];
     }

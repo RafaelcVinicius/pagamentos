@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('payment_id');
             $table->string('payment_method', 20);
-            $table->char('first_digits', 4);
+            $table->char('first_digits', 6);
+            $table->char('last_digits', 4);
             $table->timestamps();
 
             $table->foreign('payment_id')->references('id')->on('payments');

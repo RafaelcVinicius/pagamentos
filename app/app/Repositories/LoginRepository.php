@@ -12,14 +12,14 @@ use Illuminate\Support\Facades\DB;
 
 class LoginRepository implements LoginRepositoryInterface
 {
-    public function createUser(array $data) : bool
+    public function createUser(array $data): bool
     {
         $response = Http::withHeaders([
             'Authorization' => "Bearer " . $this->bearerToken(),
             'Content-Type' => "application/json",
         ])->post(config("constants.APP_AUTH") . "/admin/realms/" . config('constants.REALME') . "/users", $data);
-dd( $response);
-        if(!$response->created()){
+
+        if (!$response->created()) {
             $message = !empty($response->body()) ? array_values(json_decode($response->body(), true))[0] : "";
             throw new Exception($message, $response->status());
         }
@@ -27,10 +27,11 @@ dd( $response);
         return $this->createUserDB($data);
     }
 
-    public function token(array $data) {
+    public function token(array $data)
+    {
         $response = Http::asForm()->post(config("constants.APP_AUTH") . "/realms/" . config('constants.REALME') . "/protocol/openid-connect/token", $data);
 
-        if(!$response->ok()){
+        if (!$response->ok()) {
             $message = !empty($response->body()) ? array_values(json_decode($response->body(), true))[0] : "";
             throw new Exception($message, $response->status());
         }
@@ -38,10 +39,11 @@ dd( $response);
         return json_decode($response->body(), true);
     }
 
-    public function logout(array $data) {
+    public function logout(array $data)
+    {
         $response = Http::asForm()->post(config("constants.APP_AUTH") . "/realms/" . config('constants.REALME') . "/protocol/openid-connect/logout", $data);
 
-        if(!($response->ok() || $response->notFound())){
+        if (!($response->ok() || $response->notFound())) {
             $message = !empty($response->body()) ? array_values(json_decode($response->body(), true))[0] : "";
             throw new Exception($message, $response->status());
         }
@@ -49,18 +51,33 @@ dd( $response);
         return true;
     }
 
-    public function show(){
+    public function show()
+    {
         return Auth::user();
     }
 
-    private function bearerToken() : string {
+    private function getUser(array $data)
+    {
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer " . $data['accessToken'],
+            'Content-Type' => "application/json",
+        ])->get(config("constants.APP_AUTH") . "/admin/realms/" . config('constants.REALME') . "/users");
+
+        if (!$response->created()) {
+            $message = !empty($response->body()) ? array_values(json_decode($response->body(), true))[0] : "";
+            throw new Exception($message, $response->status());
+        }
+    }
+
+    private function bearerToken(): string
+    {
         $response = Http::asForm()->post(config("constants.APP_AUTH") . "/realms/" . config('constants.REALME') . "/protocol/openid-connect/token", [
             "client_id" => env('CLIENT_ID'),
             "client_secret" => env('CLIENT_SECRET'),
             "grant_type" => "client_credentials",
         ]);
 
-        if(!$response->ok()){
+        if (!$response->ok()) {
             $message = !empty($response->body()) ? array_values(json_decode($response->body(), true))[0] : "";
             throw new Exception($message, $response->status());
         }
@@ -68,10 +85,9 @@ dd( $response);
         return json_decode($response->body(), true)['access_token'];
     }
 
-    private function createUserDB(array $data) : bool {
-        dd( $data);
+    private function createUserDB(array $data): bool
+    {
         $user = new User();
-        $user->uuid =       DB::raw('gen_random_uuid()');
         $user->name =       $data['username'];
         $user->email =      $data['email'];
         $user->password =   $data['credentials'][0]['value'];

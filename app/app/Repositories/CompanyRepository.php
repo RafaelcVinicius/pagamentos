@@ -4,21 +4,22 @@ namespace App\Repositories;
 
 use App\Models\Companies;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class CompanyRepository implements CompanyRepositoryInterface
 {
-    public function store(array $data) : Companies
+    public function store(array $data): Companies
     {
         return Auth::user()->company()->create($data)->refresh();
     }
 
-    public function index() : array
+    public function index(): Collection
     {
-        return Auth::user()->company->all();
+        return Auth::user()->company->get();
     }
 
-    public function update(string $uuid, array $data) : Companies
+    public function update(string $uuid, array $data): Companies
     {
         $company = Auth::user()->company->where('uuid', $uuid)->firstOrFail();
         $company->update($data);
@@ -26,8 +27,8 @@ class CompanyRepository implements CompanyRepositoryInterface
         return $company->refresh();
     }
 
-    public function show(string $uuid) : Companies
+    public function show(string $uuid): Companies
     {
-       return Auth::user()->company->where('uuid', $uuid)->firstOrFail();
+        return Auth::user()->company->where('uuid', $uuid)->firstOrFail();
     }
 }

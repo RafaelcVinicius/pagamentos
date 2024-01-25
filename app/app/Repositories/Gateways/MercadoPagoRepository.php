@@ -21,11 +21,10 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
     {
         $this->mercadoPago = Auth::user()->company->mercadoPago;
 
-        if(!empty($this->mercadoPago))
-        {
+        if (!empty($this->mercadoPago)) {
             $date = new Carbon();
-            if($this->mercadoPago->expires_in_at <= $date)
-            {
+
+            if ($this->mercadoPago->expires_on <= $date) {
                 $data = [
                     "client_secret" =>  config("constants.CLIENT_SECRET_MP"),
                     "client_id" =>      config("constants.CLIENT_ID_MP"),
@@ -40,54 +39,48 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
         }
     }
 
-    public function auth(array $data) : array
+    public function auth(array $data): array
     {
         Log::info("MercadoPagoRepository@auth");
 
         $req = new CustomRequest();
-        $req->setRoute(config("constants.API_MP_URL")."/oauth/token");
+        $req->setRoute(config("constants.API_MP_URL") . "/oauth/token");
         $req->setHeaders(["Content-Type" => "application/json"]);
         $req->setBody($data);
 
-        if($req->post() && in_array($req->response->getCode(), [201, 200]))
-        {
+        if ($req->post() && in_array($req->response->getCode(), [201, 200])) {
             Log::info(json_encode($req->response->getAsString()));
             Auth::user()->company->mercadoPago()->create($this->prepareDataAuth($req->response->getAsJson()))->refresh();
             return $req->response->getAsJson();
-        }
-        else
-        {
+        } else {
             Log::info(json_encode($req->response->asString));
             throw new Exception("Error get Token auth", 401);
         }
     }
 
-    public function createPreferences(array $data) : array
+    public function createPreferences(array $data): array
     {
         Log::info("MercadoPagoRepository@createPreferences");
 
         $req = new CustomRequest();
-        $req->setRoute(config("constants.API_MP_URL")."/checkout/preferences");
+        $req->setRoute(config("constants.API_MP_URL") . "/checkout/preferences");
         $req->setHeaders([
             "Content-Type" => "application/json",
             "Authorization" =>  "Bearer " . $this->mercadoPago->access_token,
             "x-integrator-id" =>  config('constants.X_INTEGRATOR_ID'),
         ])
-        ->setBody(json_encode($data));
+            ->setBody(json_encode($data));
 
-        if($req->post() && $req->response->getCode() == 201)
-        {
+        if ($req->post() && $req->response->getCode() == 201) {
             Log::info(json_encode($req->response->getAsString()));
             return json_decode(json_encode($req->response->getAsJson()), true);
-        }
-        else
-        {
+        } else {
             Log::info(json_encode($req->response->getAsString()));
             throw new Exception("Error get Token auth");
         }
     }
 
-    public function showPayment(string $uuid) : array
+    public function showPayment(string $uuid): array
     {
         Log::info("MercadoPagoRepository@showPayment");
 
@@ -98,98 +91,88 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
             "Authorization" =>  "Bearer " . $this->mercadoPago->access_token,
         ]);
 
-        if($req->get() && $req->response->getCode() == 200)
-        {
+        if ($req->get() && $req->response->getCode() == 200) {
             Log::info(json_encode($req->response->getAsString()));
             return json_decode(json_encode($req->response->getAsJson()), true);
-        }
-        else
-        {
+        } else {
             Log::info(json_encode($req->response->getAsString()));
             throw new Exception("Error get Token auth");
         }
     }
 
-    public function createPayment(array $data) : array
+    public function createPayment(array $data): array
     {
         Log::info("MercadoPagoRepository@createPayment");
 
         $req = new CustomRequest();
-        $req->setRoute(config("constants.API_MP_URL")."/v1/payments");
+        $req->setRoute(config("constants.API_MP_URL") . "/v1/payments");
         $req->setHeaders([
             "Content-Type" =>       "application/json",
             "Authorization" =>      "Bearer " . $this->mercadoPago->access_token,
             "X-Idempotency-Key" =>  $data['external_reference'],
             "x-integrator-id" =>    config('constants.X_INTEGRATOR_ID'),
         ])
-        ->setBody(json_encode($data));
+            ->setBody(json_encode($data));
 
-        if($req->post() && in_array($req->response->getCode(), [201, 200]))
-        {
+        if ($req->post() && in_array($req->response->getCode(), [201, 200])) {
             Log::info(json_encode($req->response->getAsString()));
             return json_decode(json_encode($req->response->getAsJson()), true);
-        }
-        else
-        {
+        } else {
+            dd($req);
             Log::info(json_encode($req->response->getAsString()));
             throw new Exception("Error get Token auth");
         }
     }
 
-    public function showByEmailPayer(string $email) : array
+    public function showByEmailPayer(string $email): array
     {
         Log::info("MercadoPagoRepository@showByEmailPayer");
 
         $req = new CustomRequest();
-        $req->setRoute(config("constants.API_MP_URL")."/v1/customers/search?email=" . $email);
+        $req->setRoute(config("constants.API_MP_URL") . "/v1/customers/search?email=" . $email);
         $req->setHeaders([
             "Content-Type" => "application/json",
             "Authorization" =>  "Bearer " . $this->mercadoPago->access_token,
         ]);
 
-        if($req->get() && in_array($req->response->getCode(), [200]) && $req->response->getAsJson()->paging->total > 0)
-        {
+        if ($req->get() && in_array($req->response->getCode(), [200]) && $req->response->getAsJson()->paging->total > 0) {
             Log::info($req->response->getAsString());
             return json_decode(json_encode($req->response->getAsJson()->results[0]), true);
-        }
-        else
-        {
+        } else {
             Log::info(json_encode($req->response->getAsString()));
             Log::info(json_encode($req->response->getCode()));
             return [];
         }
     }
 
-    public function createPayer(PayerResource $data) : CustomersMercadoPago
+    public function createPayer(PayerResource $data): CustomersMercadoPago
     {
         $req = new CustomRequest();
-        $req->setRoute(config("constants.API_MP_URL")."/v1/customers");
+        $req->setRoute(config("constants.API_MP_URL") . "/v1/customers");
         $req->setHeaders([
             "Content-Type" => "application/json",
             "Authorization" =>  "Bearer " . $this->mercadoPago->access_token,
         ]);
         $req->setBody(json_encode($this->prepareDataCreatePayer($data)));
 
-        if($req->post() && in_array($req->response->getCode(), [201, 200]))
-        {
+        if ($req->post() && in_array($req->response->getCode(), [201, 200])) {
             Log::info(json_encode($req->response->getAsString()));
             return $this->savePayerToDB($data['uuid'], json_decode(json_encode($req->response->getAsJson()), true));
-        }
-        else
-        {
+        } else {
             Log::info(json_encode($req->response->getAsString()));
             throw new Exception("Error when creating payer");
         }
     }
 
-    public function savePayerToDB(string $uuid, array $data) : CustomersMercadoPago
+    public function savePayerToDB(string $uuid, array $data): CustomersMercadoPago
     {
         $payerRepository = app(PayerRepositoryInterface::class);
         $payer = $payerRepository->show($uuid);
         return $payer->mercadoPago()->create(['gateway_customer_id' => $data['id']])->refresh();
     }
 
-    private function prepareDataAuth(array $data){
+    private function prepareDataAuth(array $data)
+    {
         $date = new Carbon();
         return array(
             "gateway_user_id" => $data["user_id"],
@@ -202,7 +185,8 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
         );
     }
 
-    private function prepareDataCreatePayer(PayerResource $data){
+    private function prepareDataCreatePayer(PayerResource $data)
+    {
         $date = Carbon::now()->toIso8601String();
         return array(
             "address" => [
@@ -218,8 +202,8 @@ class MercadoPagoRepository implements PaymentGatewayRepositoryInterface
             "date_registered" => $date,
 
             "email" => $data->email,
-            "first_name"=> $data->first_name,
-            "last_name"=> $data->last_name,
+            "first_name" => $data->first_name,
+            "last_name" => $data->last_name,
             // "phone" => [
             //   "area_code" => $data->email,
             //   "number" => $data->email,

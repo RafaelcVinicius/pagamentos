@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('payment_intention_id');
             $table->bigInteger('gateway_payment_id')->unique()->comment('Id externo do gateway de pagamento');
             $table->string('payment_type', 20)->comment('Tipo da transação ex: pix cartão...');
-            $table->string('installments', 20)->comment('Tipo da transação ex: pix cartão...');
+            $table->integer('installments', 2)->comment('parcelas');
             $table->decimal('transection_amount')->comment('Valor total da transação com acréscimo');
             $table->timestamps();
 

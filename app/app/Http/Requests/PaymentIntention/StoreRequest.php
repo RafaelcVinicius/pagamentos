@@ -24,8 +24,8 @@ class StoreRequest extends FormRequest
         return [
             "payerUuid"                             => ['uuid'],
             "origin"                                => ['string', 'max:1'],
-            "totalAmount"                           => ['required', 'numeric'],
             "gateway"                               => ['required', 'string', 'min:1', 'max:2'],
+            "totalAmount"                           => ['required', 'numeric'],
             "callbackUrl"                           => ['required', 'string', 'min:10', 'max:100'],
             "webHook"                               => ['required', 'string', 'min:10', 'max:100'],
             "additionalInfo.items"                  => ['array'],

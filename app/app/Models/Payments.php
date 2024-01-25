@@ -14,7 +14,7 @@ class Payments extends Model
     protected $table = 'payments';
 
     protected $fillable = [
-        'uuid', 'email', 'gateway_payment_id', 'payment_type', 'payment_intention_id', 'transection_amount'
+        'uuid', 'email', 'gateway_payment_id', 'payment_type', 'payment_intention_id', 'transection_amount', 'installments'
     ];
 
     public function payer()
@@ -24,7 +24,7 @@ class Payments extends Model
 
     public function status()
     {
-        return $this->hasOne(PaymentsStatus::class, 'payment_id', 'id');
+        return $this->hasOne(PaymentStatus::class, 'payment_id', 'id');
     }
 
     public function paymentIntention()
@@ -32,17 +32,17 @@ class Payments extends Model
         return $this->hasOne(PaymentsIntention::class, 'id', 'payment_intention_id');
     }
 
-    public function paymentDetailPix()
+    public function detailPix()
     {
         return $this->hasOne(PaymentDetailPix::class, 'payment_id', 'id');
     }
 
-    public function paymentDetailCards()
+    public function detailCards()
     {
         return $this->hasMany(PaymentDetailCards::class, 'payment_id', 'id');
     }
 
-    public function paymentFeeDetails()
+    public function feeDetails()
     {
         return $this->hasMany(PaymentFeeDetails::class, 'payment_id', 'id');
     }

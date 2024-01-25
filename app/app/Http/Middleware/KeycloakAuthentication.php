@@ -24,30 +24,21 @@ class KeycloakAuthentication
         $token = $request->bearerToken();
 
         try {
-            if(!$token){
+            if (!$token) {
 
-                if(str_contains($request->route()->uri, 'api/v1/intentions') && $request->route('intentionUuid'))
-                {
+                if (str_contains($request->route()->uri, 'api/v1/intentions') && $request->route('intentionUuid')) {
                     $paymentsIntention = PaymentsIntention::where('uuid', $request->route('intentionUuid'))->firstOrFail();
                     $user =  $paymentsIntention->company->user;
-                }
-                else if(str_contains($request->route()->uri, 'api/v1/payments') && $request->method() == "POST" && $request->route('paymentUuid'))
-                {
+                } else if (str_contains($request->route()->uri, 'api/v1/payments') && $request->method() == "POST" && $request->route('paymentUuid')) {
                     $payments = Payments::where('uuid', $request->route('paymentUuid'))->firstOrFail();
                     $user =  $payments->paymentIntention->company->user;
-                }
-                else if(str_contains($request->route()->uri, 'api/v1/payments') && $request->method() == "POST")
-                {
+                } else if (str_contains($request->route()->uri, 'api/v1/payments') && $request->method() == "POST") {
                     $paymentsIntention = PaymentsIntention::where('uuid', $request->get('paymentIntentionUuid'))->firstOrFail();
                     $user =  $paymentsIntention->company->user;
-                }
-                else
-                {
+                } else {
                     return response()->json(['message' => 'Token de acesso ausente!'], 401);
                 }
-            }
-            else
-            {
+            } else {
                 $publicKey = <<<EOD
                     -----BEGIN PUBLIC KEY-----
                     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvwvpqGmphmPooNnfCU3QyfkdCM4+UwNxC+hVUxiBYkFBP4szJ3DtDM3twqc+4inUIlh+h96tyhL+C2KaWXj5xvGO9tUxgPjtRmvqUKDckdULMdb5Y9Ke86OQPlj4jqpMp1Ifs5M6rYbWreSXuGud24ey5Jc/w9K2t5nHMwAf5FLSh6Wpu62fQK3xQnaQnosFpmzo9G5X46/qfxUZliPKmnyrDtBbEeFnOnzlI2JRdG98XH9oNyFzYXrUYsaRRwpOVNwSeNxSpqxFzXwLuZUIN1tqDU/WWgtS7ML5ZxvUq0I2bLxf6iUHttagmdhdnnw7/05PYcDhnVpVGuCacQ/i8wIDAQAB
@@ -56,7 +47,7 @@ class KeycloakAuthentication
 
                 $decodedToken = JWT::decode($token, new Key($publicKey, 'RS256'));
 
-                $user = User::where('uuid', $decodedToken->sub)->firstOrFail();
+                $user = User::where('email', $decodedToken->email)->firstOrFail();
             }
 
             Auth::loginUsingId($user->id);

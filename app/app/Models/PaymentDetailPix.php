@@ -13,5 +13,5 @@ class PaymentDetailPix extends Model
     protected $primaryKey = 'id';
     protected $table = 'payment_detail_pix';
 
-    protected $fillable = ['payment_id', 'e2e_id', 'qr_code'];
+    protected $fillable = ['payment_id', 'e2e_id', 'qr_code', 'expires_on'];
 }

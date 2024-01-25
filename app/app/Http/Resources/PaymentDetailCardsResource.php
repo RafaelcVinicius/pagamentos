@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PaymentDelailCardsResource extends JsonResource
+class PaymentDetailCardsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

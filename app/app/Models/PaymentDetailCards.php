@@ -13,5 +13,5 @@ class PaymentDetailCards extends Model
     protected $primaryKey = 'id';
     protected $table = 'payment_detail_cards';
 
-    protected $fillable = ['payment_id', 'payment_method', 'first_digits'];
+    protected $fillable = ['payment_id', 'payment_method', 'first_digits', 'last_digits'];
 }

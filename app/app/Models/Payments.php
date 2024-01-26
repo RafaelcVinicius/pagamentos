@@ -24,7 +24,12 @@ class Payments extends Model
 
     public function status()
     {
-        return $this->hasOne(PaymentStatus::class, 'payment_id', 'id');
+        return $this->hasMany(PaymentStatus::class, 'payment_id', 'id');
+    }
+
+    public function lastStatus()
+    {
+        return $this->status()->orderBy('created_at', 'desc')->first();
     }
 
     public function paymentIntention()

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PaymentDetailCardsResource extends JsonResource
+class PaymentStatusResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,9 +15,9 @@ class PaymentDetailCardsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'paymentMethod'         => $this->payment_method,
-            'firstDigits'           => $this->first_digits,
-            'lastDigits'            => $this->last_digits,
+            "status"            => $this->status,
+            "detail"            => $this->detail,
+            "createdAt"         => $this->created_at
         ];
     }
 }
